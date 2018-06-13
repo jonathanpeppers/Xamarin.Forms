@@ -31,51 +31,20 @@ namespace Xamarin.Forms.Platform.Android
 
 			imageView.SetImageResource(global::Android.Resource.Color.Transparent);
 
-			Bitmap bitmap = null;
-			Drawable drawable = null;
-
 			IImageSourceHandler handler;
 
 			if (source != null && (handler = Internals.Registrar.Registered.GetHandlerForObject<IImageSourceHandler>(source)) != null)
 			{
-				if (handler is FileImageSourceHandler)
+				try
 				{
-					drawable = imageView.Context.GetDrawable((FileImageSource)source);
+					await handler.LoadImageAsync(source, imageView);
 				}
-
-				if (drawable == null)
+				catch (TaskCanceledException)
 				{
-					try
-					{
-						bitmap = await handler.LoadImageAsync(source, imageView.Context);
-					}
-					catch (TaskCanceledException)
-					{
-						imageController?.SetIsLoading(false);
-					}
+					imageController?.SetIsLoading(false);
 				}
 			}
 
-			// Check if the source on the new image has changed since the image was loaded
-			if (newImage != null && !Equals(newImage.Source, source))
-			{
-				bitmap?.Dispose();
-				return;
-			}
-
-			if (!imageView.IsDisposed())
-			{
-				if (bitmap == null && drawable != null)
-				{
-					imageView.SetImageDrawable(drawable);
-				}
-				else
-				{
-					imageView.SetImageBitmap(bitmap);
-				}
-			}
-
-			bitmap?.Dispose();
 			imageController?.SetIsLoading(false);
 			((IVisualElementController)newImage)?.NativeSizeChanged();
 

@@ -396,9 +396,9 @@ namespace Xamarin.Forms.Platform.Android
 					var icon = item.Icon;
 					if (!string.IsNullOrEmpty(icon))
 					{
-						Drawable iconDrawable = _context.GetFormsDrawable(icon);
-						if (iconDrawable != null)
-							menuItem.SetIcon(iconDrawable);
+						int resource = ResourceManager.GetResourceByName(icon.File);
+						if (resource != 0)
+							menuItem.SetIcon(resource);
 					}
 					menuItem.SetEnabled(controller.IsEnabled);
 					menuItem.SetShowAsAction(ShowAsAction.Always);

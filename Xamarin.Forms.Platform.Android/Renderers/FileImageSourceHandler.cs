@@ -2,34 +2,29 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
+using Android.Net;
 using Android.Graphics;
+using Android.Widget;
 using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms.Platform.Android
 {
 	public sealed class FileImageSourceHandler : IImageSourceHandler
 	{
-		// This is set to true when run under designer context
-		internal static bool DecodeSynchronously {
-			get;
-			set;
-		}
-
-		public async Task<Bitmap> LoadImageAsync(ImageSource imagesource, Context context, CancellationToken cancelationToken = default(CancellationToken))
+		public Task LoadImageAsync(ImageSource imageSource, ImageView imageView, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			string file = ((FileImageSource)imagesource).File;
-			Bitmap bitmap;
-			if (File.Exists (file))
-				bitmap = !DecodeSynchronously ? (await BitmapFactory.DecodeFileAsync (file).ConfigureAwait (false)) : BitmapFactory.DecodeFile (file);
-			else
-				bitmap = !DecodeSynchronously ? (await context.Resources.GetBitmapAsync (file).ConfigureAwait (false)) : context.Resources.GetBitmap (file);
-
-			if (bitmap == null)
+			string name = ((FileImageSource)imageSource).File;
+			int resource = ResourceManager.GetResourceByName(name);
+			if (resource != 0)
 			{
-				Log.Warning(nameof(FileImageSourceHandler), "Could not find image or image file was invalid: {0}", imagesource);
+				imageView.SetImageResource(resource);
 			}
-
-			return bitmap;
+			else
+			{
+				var file = new Java.IO.File(name);
+				imageView.SetImageURI(Uri.FromFile(file));
+			}
+			return Task.FromResult(true);
 		}
 	}
 }

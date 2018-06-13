@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Graphics;
+using Android.Widget;
 using Xamarin.Forms;
 using Xamarin.Forms.ControlGallery.Android;
 using Xamarin.Forms.Controls.Issues;
@@ -13,7 +14,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 {
 	public sealed class BrokenImageSourceHandler : IImageSourceHandler
 	{
-		public Task<Bitmap> LoadImageAsync(ImageSource imagesource, Context context, CancellationToken cancelationToken = default(CancellationToken))
+		public Task LoadImageAsync(ImageSource imageSource, ImageView imageView, CancellationToken cancelationToken = default(CancellationToken))
 		{
 			throw new Exception("Fail");
 		}

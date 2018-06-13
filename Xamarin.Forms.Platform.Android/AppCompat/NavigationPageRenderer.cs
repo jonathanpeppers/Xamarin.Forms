@@ -819,11 +819,10 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 			FileImageSource icon = toolBarItem.Icon;
 			if (!string.IsNullOrEmpty(icon))
 			{
-				Drawable iconDrawable = context.GetFormsDrawable(icon);
-				if (iconDrawable != null)
+				int resource = ResourceManager.GetDrawableByName(icon.File);
+				if (resource != 0)
 				{
-					menuItem.SetIcon(iconDrawable);
-					iconDrawable.Dispose();
+					menuItem.SetIcon(resource);
 				}
 			}
 		}

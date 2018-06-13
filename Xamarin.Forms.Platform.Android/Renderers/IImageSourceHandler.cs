@@ -1,12 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Content;
-using Android.Graphics;
+using Android.Widget;
 
 namespace Xamarin.Forms.Platform.Android
 {
 	public interface IImageSourceHandler : IRegisterable
 	{
-		Task<Bitmap> LoadImageAsync(ImageSource imagesource, Context context, CancellationToken cancelationToken = default(CancellationToken));
+		Task LoadImageAsync(ImageSource imageSource, ImageView imageView, CancellationToken cancellationToken = default(CancellationToken));
 	}
 }

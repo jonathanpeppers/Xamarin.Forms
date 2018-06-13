@@ -1,6 +1,6 @@
 @echo off
 rem stub uncommon targets
-set NUGET_EXE=%NUGET_DIR%NuGet.exe
+set NUGET_EXE=C:\Users\jopepper\Desktop\Git\Xamarin.Forms\NuGet.exe
 
 mkdir Xamarin.Forms.Platform.MacOS\bin\debug\
 mkdir Xamarin.Forms.Platform.Tizen\bin\debug\tizen40\

@@ -67,4 +67,20 @@ namespace Xamarin.Forms.Controls.GalleryPages.PerformanceGallery.Scenarios
 			View = layout;
 		}
 	}
+
+	[Preserve(AllMembers = true)]
+	internal class ImageScenario5 : PerformanceScenario
+	{
+		public ImageScenario5()
+		: base(".[Image] 100x from Uri")
+		{
+			var source = ImageSource.FromUri(new Uri("http://httpbin.org/image/png"));
+			var layout = new StackLayout();
+			for (int i = 0; i < 100; i++)
+			{
+				layout.Children.Add(new Image { Source = source, HeightRequest = 20 });
+			}
+			View = layout;
+		}
+	}
 }

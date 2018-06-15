@@ -5,6 +5,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.Widget;
 using Android.Net;
+using Android.Glide;
 using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms.Platform.Android
@@ -39,19 +40,12 @@ namespace Xamarin.Forms.Platform.Android
 			string file = ((FileImageSource)imagesource).File;
 			if (File.Exists(file))
 			{
-				var uri = Uri.Parse(file);
-				if (uri != null)
-					imageView.SetImageURI(uri);
-				else
-					Log.Warning(nameof(FileImageSourceHandler), "Could not find image or image file was invalid: {0}", imagesource);
+				Glide.With(imageView.Context).Load(file).Into(imageView);
 			}
 			else
 			{
 				int resource = ResourceManager.GetDrawableByName(file);
-				if (resource != 0)
-					imageView.SetImageResource(resource);
-				else
-					Log.Warning(nameof(FileImageSourceHandler), "Could not find image or image file was invalid: {0}", imagesource);
+				Glide.With(imageView.Context).Load(resource).Into(imageView);
 			}
 
 			return Task.FromResult(true);

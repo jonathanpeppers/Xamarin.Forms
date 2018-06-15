@@ -292,6 +292,10 @@
   </Target>
   -->
   <ItemGroup>
+    <ProjectReference Include="..\glidex\glidex.csproj">
+      <Project>{d8d4d6c6-b845-4114-ade0-ea3777c5e452}</Project>
+      <Name>glidex</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
       <Project>{57B8B73D-C3B5-4C42-869E-7B2F17D354AC}</Project>
       <Name>Xamarin.Forms.Core</Name>

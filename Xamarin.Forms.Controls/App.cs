@@ -32,8 +32,8 @@ namespace Xamarin.Forms.Controls
 		public App()
 		{
 			_testCloudService = DependencyService.Get<ITestCloudService>();
-
-			SetMainPage(CreateDefaultMainPage());
+			
+			//SetMainPage(CreateDefaultMainPage());
 
 			//TestMainPageSwitches();
 		}
@@ -95,6 +95,8 @@ namespace Xamarin.Forms.Controls
 
 			//// Uncomment to verify that there is no crash when rapidly switching pages that contain lots of buttons
 			//SetMainPage(new Issues.Issue2004());
+
+			SetMainPage(new Issues.Issue2004());
 		}
 
 		async Task TestMainPageSwitches()

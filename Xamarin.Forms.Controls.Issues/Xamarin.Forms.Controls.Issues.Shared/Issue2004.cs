@@ -47,6 +47,8 @@ namespace Xamarin.Forms.Controls.Issues
 			Application.Current.MainPage = RootPage;
 		}
 
+		public static INavigation NavigationPage => RootPage.Detail.Navigation;
+
 		static void SetPage(Page page)
 		{
 			RootPage.Detail = page;
@@ -56,8 +58,6 @@ namespace Xamarin.Forms.Controls.Issues
 		{
 			await Task.Delay(delay);
 		}
-
-		public static INavigation NavigationPage => RootPage.Detail.Navigation;
 
 		public static async Task DisposedBitmapTest()
 		{
@@ -80,9 +80,14 @@ namespace Xamarin.Forms.Controls.Issues
 			SetPage(Issue2004.associationsPage);
 			await UI(999);
 
+			//crash happens here
 			SetPage(Issue2004.addressesPage);
 			await UI(999);
-			SetPage(new ContentPage() { Content = new Label() { Text = "Success" } });
+
+			DisposedBitmapTest();
+			await UI(999);
+
+			//SetPage(new ContentPage() { Content = new Label() { Text = "Success" } });
 		}
 
 

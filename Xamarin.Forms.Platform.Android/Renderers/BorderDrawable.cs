@@ -36,8 +36,10 @@ namespace Xamarin.Forms.Platform.Android
 			set { _paddingTop = value; }
 		}
 
+		string MyPersonalId = Guid.NewGuid().ToString();
 		public BorderDrawable(Func<double, float> convertToPixels, Color defaultColor, bool drawOutlineWithBackground)
 		{
+			
 			_convertToPixels = convertToPixels;
 			_pressed = false;
 			_defaultColor = defaultColor;
@@ -110,6 +112,7 @@ namespace Xamarin.Forms.Platform.Android
 			return this;
 		}
 
+		
 		public void Reset()
 		{
 			if (_normalBitmap != null)
@@ -120,6 +123,7 @@ namespace Xamarin.Forms.Platform.Android
 					_normalBitmap.Dispose();
 				}
 				_normalBitmap = null;
+				//System.Diagnostics.Debug.WriteLine($"AFTER _normalBitmap: Reset: {Handle}  {MyPersonalId}");
 			}
 
 			if (_pressedBitmap != null)
@@ -130,6 +134,7 @@ namespace Xamarin.Forms.Platform.Android
 					_pressedBitmap.Dispose();
 				}
 				_pressedBitmap = null;
+				//System.Diagnostics.Debug.WriteLine($"AFTER _pressedBitmap: Reset: {Handle}  {MyPersonalId}");
 			}
 		}
 
@@ -146,6 +151,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		protected override void Dispose(bool disposing)
 		{
+			//System.Diagnostics.Debug.WriteLine($"Button Drawable Dispose: {Handle} {MyPersonalId}");
 			if (_isDisposed)
 				return;
 

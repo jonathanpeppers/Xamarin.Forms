@@ -18,6 +18,7 @@
     <TargetFrameworkVersion>$(AndroidTargetFrameworkVersion)</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <AndroidClassParser>class-parse</AndroidClassParser>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <AndroidTlsProvider>

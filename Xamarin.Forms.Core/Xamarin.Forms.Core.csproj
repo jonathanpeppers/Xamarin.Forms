@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
+		<DefineConstants Condition="'$(DontTime)'=='True'">$(DefineConstants);DONT_TIME</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>
@@ -22,6 +23,13 @@
 		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
 		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
 		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Fody" Version="5.1.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="MethodTimer.Fody" Version="3.0.0" />
 	</ItemGroup>	
 	<PropertyGroup>
     <GitInfoReportImportance>high</GitInfoReportImportance>

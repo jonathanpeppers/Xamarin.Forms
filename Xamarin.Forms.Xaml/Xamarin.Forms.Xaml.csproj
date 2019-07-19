@@ -1,11 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
+    <DefineConstants Condition="'$(DontTime)'=='True'">$(DefineConstants);DONT_TIME</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Xamarin.Forms.Core\TimingSettings.cs" Link="TimingSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MethodTimer.Fody" Version="3.0.0" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj">
     </ProjectReference>

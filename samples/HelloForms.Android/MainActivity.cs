@@ -9,6 +9,7 @@ using Android.OS;
 
 namespace HelloForms.Droid
 {
+    [Register("com.xamarin.forms.MainActivity")]
     [Activity(Label = "HelloForms", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {

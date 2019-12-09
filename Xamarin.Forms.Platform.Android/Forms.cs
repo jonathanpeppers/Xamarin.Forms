@@ -71,7 +71,7 @@ namespace Xamarin.Forms
 		static Color _ColorButtonNormal = Color.Default;
 		public static Color ColorButtonNormalOverride { get; set; }
 
-		internal static BuildVersionCodes SdkInt => Anticipator.SdkInt;
+		internal static BuildVersionCodes SdkInt => global::Android.OS.Build.VERSION.SdkInt;
 		internal static bool IsLollipopOrNewer
 		{
 			get

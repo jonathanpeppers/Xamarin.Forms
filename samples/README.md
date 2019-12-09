@@ -37,3 +37,36 @@ Runtime.init            00:00:00.3120000
 ----------------------------------------------------------------
 ```
 `adb.zip` contains the full `adb logcat` output.
+
+After removing "Anticipator":
+```
+Activity: Displayed     00:00:01.3630000
+Activity: Displayed     00:00:01.2530000
+Activity: Displayed     00:00:01.3230000
+Activity: Displayed     00:00:01.2580000
+Activity: Displayed     00:00:01.3130000
+Activity: Displayed     00:00:01.2580000
+Activity: Displayed     00:00:01.3070000
+Activity: Displayed     00:00:01.3010000
+Activity: Displayed     00:00:01.2630000
+Activity: Displayed     00:00:01.2860000
+Activity: Displayed     00:00:01.3020000
+Activity: Displayed     00:00:01.2830000
+Runtime.init            00:00:00.3176452
+Runtime.init            00:00:00.3135985
+Runtime.init            00:00:00.3238804
+Runtime.init            00:00:00.3090798
+Runtime.init            00:00:00.3162993
+Runtime.init            00:00:00.3104849
+Runtime.init            00:00:00.3199472
+Runtime.init            00:00:00.3106188
+Runtime.init            00:00:00.3101623
+Runtime.init            00:00:00.3116972
+Runtime.init            00:00:00.3156054
+Runtime.init            00:00:00.3197406
+----------------------------------------------------------------
+Activity: Displayed     00:00:01.2930000
+----------------------------------------------------------------
+Runtime.init            00:00:00.3150000
+----------------------------------------------------------------
+```

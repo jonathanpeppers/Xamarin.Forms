@@ -70,3 +70,35 @@ Activity: Displayed     00:00:01.2930000
 Runtime.init            00:00:00.3150000
 ----------------------------------------------------------------
 ```
+Emulator:
+```
+Activity: Displayed     00:00:01.9230000
+Activity: Displayed     00:00:01.5950000
+Activity: Displayed     00:00:01.5310000
+Activity: Displayed     00:00:01.5550000
+Activity: Displayed     00:00:01.5640000
+Activity: Displayed     00:00:01.5560000
+Activity: Displayed     00:00:01.5480000
+Activity: Displayed     00:00:01.5200000
+Activity: Displayed     00:00:01.6070000
+Activity: Displayed     00:00:01.5630000
+Activity: Displayed     00:00:01.5930000
+Activity: Displayed     00:00:02.0430000
+Runtime.init            00:00:00.7258529
+Runtime.init            00:00:00.5182225
+Runtime.init            00:00:00.5117922
+Runtime.init            00:00:00.5174787
+Runtime.init            00:00:00.5267223
+Runtime.init            00:00:00.5218531
+Runtime.init            00:00:00.4988990
+Runtime.init            00:00:00.5052268
+Runtime.init            00:00:00.5586247
+Runtime.init            00:00:00.5334901
+Runtime.init            00:00:00.5488722
+Runtime.init            00:00:00.7187182
+----------------------------------------------------------------
+Activity: Displayed     00:00:01.6330000
+----------------------------------------------------------------
+Runtime.init            00:00:00.5570000
+----------------------------------------------------------------
+```

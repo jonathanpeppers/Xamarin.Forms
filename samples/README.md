@@ -36,6 +36,39 @@ Activity: Displayed     00:00:01.3080000
 Runtime.init            00:00:00.3120000
 ----------------------------------------------------------------
 ```
+Emulator:
+```
+Activity: Displayed     00:00:01.6380000
+Activity: Displayed     00:00:01.5650000
+Activity: Displayed     00:00:01.5570000
+Activity: Displayed     00:00:01.5520000
+Activity: Displayed     00:00:01.6780000
+Activity: Displayed     00:00:01.6270000
+Activity: Displayed     00:00:01.6190000
+Activity: Displayed     00:00:01.6040000
+Activity: Displayed     00:00:01.6060000
+Activity: Displayed     00:00:01.5660000
+Activity: Displayed     00:00:01.5770000
+Activity: Displayed     00:00:01.8980000
+Runtime.init            00:00:00.5399921
+Runtime.init            00:00:00.5211283
+Runtime.init            00:00:00.4972260
+Runtime.init            00:00:00.5203300
+Runtime.init            00:00:00.4998498
+Runtime.init            00:00:00.5635396
+Runtime.init            00:00:00.5239552
+Runtime.init            00:00:00.5414596
+Runtime.init            00:00:00.5166735
+Runtime.init            00:00:00.5198104
+Runtime.init            00:00:00.5106355
+Runtime.init            00:00:00.6588019
+----------------------------------------------------------------
+Activity: Displayed     00:00:01.6240000
+----------------------------------------------------------------
+Runtime.init            00:00:00.5340000
+----------------------------------------------------------------
+```
+
 `adb.zip` contains the full `adb logcat` output.
 
 After removing "Anticipator":

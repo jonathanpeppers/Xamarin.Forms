@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Xamarin.Forms.Core\Color.cs" Link="Color.cs" />
+    <Compile Include="..\..\Xamarin.Forms.Core\NumericExtensions.cs" Link="NumericExtensions.cs" />
+  </ItemGroup>
+
+</Project>

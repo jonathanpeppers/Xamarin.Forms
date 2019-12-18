@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms
@@ -87,6 +88,7 @@ namespace Xamarin.Forms
 		{
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		Color(double w, double x, double y, double z, Mode mode)
 		{
 			_mode = mode;
@@ -112,6 +114,28 @@ namespace Xamarin.Forms
 					ConvertToRgb(_hue, _saturation, _luminosity, mode, out _r, out _g, out _b);
 					break;
 			}
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		Color(float r, float g, float b)
+		{
+			_r = r;
+			_g = g;
+			_b = b;
+			_a = 1;
+			_mode = Mode.Rgb;
+			ConvertToHsl(_r, _g, _b, _mode, out _hue, out _saturation, out _luminosity);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		Color(float r, float g, float b, float a)
+		{
+			_r = r;
+			_g = g;
+			_b = b;
+			_a = a;
+			_mode = Mode.Rgb;
+			ConvertToHsl(_r, _g, _b, _mode, out _hue, out _saturation, out _luminosity);
 		}
 
 		public Color(double r, double g, double b) : this(r, g, b, 1)
@@ -418,150 +442,293 @@ namespace Xamarin.Forms
 		#region Color Definitions
 
 		// matches colors in WPF's System.Windows.Media.Colors
-		public static readonly Color AliceBlue = FromRgb(240, 248, 255);
-		public static readonly Color AntiqueWhite = FromRgb(250, 235, 215);
-		public static readonly Color Aqua = FromRgb(0, 255, 255);
-		public static readonly Color Aquamarine = FromRgb(127, 255, 212);
-		public static readonly Color Azure = FromRgb(240, 255, 255);
-		public static readonly Color Beige = FromRgb(245, 245, 220);
-		public static readonly Color Bisque = FromRgb(255, 228, 196);
-		public static readonly Color Black = FromRgb(0, 0, 0);
-		public static readonly Color BlanchedAlmond = FromRgb(255, 235, 205);
-		public static readonly Color Blue = FromRgb(0, 0, 255);
-		public static readonly Color BlueViolet = FromRgb(138, 43, 226);
-		public static readonly Color Brown = FromRgb(165, 42, 42);
-		public static readonly Color BurlyWood = FromRgb(222, 184, 135);
-		public static readonly Color CadetBlue = FromRgb(95, 158, 160);
-		public static readonly Color Chartreuse = FromRgb(127, 255, 0);
-		public static readonly Color Chocolate = FromRgb(210, 105, 30);
-		public static readonly Color Coral = FromRgb(255, 127, 80);
-		public static readonly Color CornflowerBlue = FromRgb(100, 149, 237);
-		public static readonly Color Cornsilk = FromRgb(255, 248, 220);
-		public static readonly Color Crimson = FromRgb(220, 20, 60);
-		public static readonly Color Cyan = FromRgb(0, 255, 255);
-		public static readonly Color DarkBlue = FromRgb(0, 0, 139);
-		public static readonly Color DarkCyan = FromRgb(0, 139, 139);
-		public static readonly Color DarkGoldenrod = FromRgb(184, 134, 11);
-		public static readonly Color DarkGray = FromRgb(169, 169, 169);
-		public static readonly Color DarkGreen = FromRgb(0, 100, 0);
-		public static readonly Color DarkKhaki = FromRgb(189, 183, 107);
-		public static readonly Color DarkMagenta = FromRgb(139, 0, 139);
-		public static readonly Color DarkOliveGreen = FromRgb(85, 107, 47);
-		public static readonly Color DarkOrange = FromRgb(255, 140, 0);
-		public static readonly Color DarkOrchid = FromRgb(153, 50, 204);
-		public static readonly Color DarkRed = FromRgb(139, 0, 0);
-		public static readonly Color DarkSalmon = FromRgb(233, 150, 122);
-		public static readonly Color DarkSeaGreen = FromRgb(143, 188, 143);
-		public static readonly Color DarkSlateBlue = FromRgb(72, 61, 139);
-		public static readonly Color DarkSlateGray = FromRgb(47, 79, 79);
-		public static readonly Color DarkTurquoise = FromRgb(0, 206, 209);
-		public static readonly Color DarkViolet = FromRgb(148, 0, 211);
-		public static readonly Color DeepPink = FromRgb(255, 20, 147);
-		public static readonly Color DeepSkyBlue = FromRgb(0, 191, 255);
-		public static readonly Color DimGray = FromRgb(105, 105, 105);
-		public static readonly Color DodgerBlue = FromRgb(30, 144, 255);
-		public static readonly Color Firebrick = FromRgb(178, 34, 34);
-		public static readonly Color FloralWhite = FromRgb(255, 250, 240);
-		public static readonly Color ForestGreen = FromRgb(34, 139, 34);
-		public static readonly Color Fuchsia = FromRgb(255, 0, 255);
+
+		// Color.FromRgb(240, 248, 255)
+		public static readonly Color AliceBlue = new Color(0.94117647409439087f, 0.97254902124404907f, 1f);
+		// Color.FromRgb(250, 235, 215)
+		public static readonly Color AntiqueWhite = new Color(0.98039215803146362f, 0.92156863212585449f, 0.843137264251709f);
+		// Color.FromRgb(0, 255, 255)
+		public static readonly Color Aqua = new Color(0f, 1f, 1f);
+		// Color.FromRgb(127, 255, 212)
+		public static readonly Color Aquamarine = new Color(0.49803921580314636f, 1f, 0.83137255907058716f);
+		// Color.FromRgb(240, 255, 255)
+		public static readonly Color Azure = new Color(0.94117647409439087f, 1f, 1f);
+		// Color.FromRgb(245, 245, 220)
+		public static readonly Color Beige = new Color(0.96078431606292725f, 0.96078431606292725f, 0.86274510622024536f);
+		// Color.FromRgb(255, 228, 196)
+		public static readonly Color Bisque = new Color(1f, 0.89411765336990356f, 0.76862746477127075f);
+		// Color.FromRgb(0, 0, 0)
+		public static readonly Color Black = new Color(0f, 0f, 0f);
+		// Color.FromRgb(255, 235, 205)
+		public static readonly Color BlanchedAlmond = new Color(1f, 0.92156863212585449f, 0.80392158031463623f);
+		// Color.FromRgb(0, 0, 255)
+		public static readonly Color Blue = new Color(0f, 0f, 1f);
+		// Color.FromRgb(138, 43, 226)
+		public static readonly Color BlueViolet = new Color(0.54117649793624878f, 0.16862745583057404f, 0.886274516582489f);
+		// Color.FromRgb(165, 42, 42)
+		public static readonly Color Brown = new Color(0.64705884456634521f, 0.16470588743686676f, 0.16470588743686676f);
+		// Color.FromRgb(222, 184, 135)
+		public static readonly Color BurlyWood = new Color(0.87058824300765991f, 0.72156864404678345f, 0.529411792755127f);
+		// Color.FromRgb(95, 158, 160)
+		public static readonly Color CadetBlue = new Color(0.37254902720451355f, 0.61960786581039429f, 0.62745100259780884f);
+		// Color.FromRgb(127, 255, 0)
+		public static readonly Color Chartreuse = new Color(0.49803921580314636f, 1f, 0f);
+		// Color.FromRgb(210, 105, 30)
+		public static readonly Color Chocolate = new Color(0.82352942228317261f, 0.4117647111415863f, 0.11764705926179886f);
+		// Color.FromRgb(255, 127, 80)
+		public static readonly Color Coral = new Color(1f, 0.49803921580314636f, 0.31372550129890442f);
+		// Color.FromRgb(100, 149, 237)
+		public static readonly Color CornflowerBlue = new Color(0.39215686917304993f, 0.58431375026702881f, 0.929411768913269f);
+		// Color.FromRgb(255, 248, 220)
+		public static readonly Color Cornsilk = new Color(1f, 0.97254902124404907f, 0.86274510622024536f);
+		// Color.FromRgb(220, 20, 60)
+		public static readonly Color Crimson = new Color(0.86274510622024536f, 0.0784313753247261f, 0.23529411852359772f);
+		// Color.FromRgb(0, 255, 255)
+		public static readonly Color Cyan = new Color(0f, 1f, 1f);
+		// Color.FromRgb(0, 0, 139)
+		public static readonly Color DarkBlue = new Color(0f, 0f, 0.545098066329956f);
+		// Color.FromRgb(0, 139, 139)
+		public static readonly Color DarkCyan = new Color(0f, 0.545098066329956f, 0.545098066329956f);
+		// Color.FromRgb(184, 134, 11)
+		public static readonly Color DarkGoldenrod = new Color(0.72156864404678345f, 0.52549022436141968f, 0.043137256056070328f);
+		// Color.FromRgb(169, 169, 169)
+		public static readonly Color DarkGray = new Color(0.66274511814117432f, 0.66274511814117432f, 0.66274511814117432f);
+		// Color.FromRgb(0, 100, 0)
+		public static readonly Color DarkGreen = new Color(0f, 0.39215686917304993f, 0f);
+		// Color.FromRgb(189, 183, 107)
+		public static readonly Color DarkKhaki = new Color(0.74117648601531982f, 0.71764707565307617f, 0.41960784792900085f);
+		// Color.FromRgb(139, 0, 139)
+		public static readonly Color DarkMagenta = new Color(0.545098066329956f, 0f, 0.545098066329956f);
+		// Color.FromRgb(85, 107, 47)
+		public static readonly Color DarkOliveGreen = new Color(0.3333333432674408f, 0.41960784792900085f, 0.18431372940540314f);
+		// Color.FromRgb(255, 140, 0)
+		public static readonly Color DarkOrange = new Color(1f, 0.54901963472366333f, 0f);
+		// Color.FromRgb(153, 50, 204)
+		public static readonly Color DarkOrchid = new Color(0.60000002384185791f, 0.19607843458652496f, 0.800000011920929f);
+		// Color.FromRgb(139, 0, 0)
+		public static readonly Color DarkRed = new Color(0.545098066329956f, 0f, 0f);
+		// Color.FromRgb(233, 150, 122)
+		public static readonly Color DarkSalmon = new Color(0.91372549533843994f, 0.58823531866073608f, 0.47843137383461f);
+		// Color.FromRgb(143, 188, 143)
+		public static readonly Color DarkSeaGreen = new Color(0.56078433990478516f, 0.73725491762161255f, 0.56078433990478516f);
+		// Color.FromRgb(72, 61, 139)
+		public static readonly Color DarkSlateBlue = new Color(0.28235295414924622f, 0.239215686917305f, 0.545098066329956f);
+		// Color.FromRgb(47, 79, 79)
+		public static readonly Color DarkSlateGray = new Color(0.18431372940540314f, 0.30980393290519714f, 0.30980393290519714f);
+		// Color.FromRgb(0, 206, 209)
+		public static readonly Color DarkTurquoise = new Color(0f, 0.80784314870834351f, 0.81960785388946533f);
+		// Color.FromRgb(148, 0, 211)
+		public static readonly Color DarkViolet = new Color(0.58039218187332153f, 0f, 0.82745099067687988f);
+		// Color.FromRgb(255, 20, 147)
+		public static readonly Color DeepPink = new Color(1f, 0.0784313753247261f, 0.57647061347961426f);
+		// Color.FromRgb(0, 191, 255)
+		public static readonly Color DeepSkyBlue = new Color(0f, 0.74901962280273438f, 1f);
+		// Color.FromRgb(105, 105, 105)
+		public static readonly Color DimGray = new Color(0.4117647111415863f, 0.4117647111415863f, 0.4117647111415863f);
+		// Color.FromRgb(30, 144, 255)
+		public static readonly Color DodgerBlue = new Color(0.11764705926179886f, 0.56470590829849243f, 1f);
+		// Color.FromRgb(178, 34, 34)
+		public static readonly Color Firebrick = new Color(0.69803923368453979f, 0.13333334028720856f, 0.13333334028720856f);
+		// Color.FromRgb(255, 250, 240)
+		public static readonly Color FloralWhite = new Color(1f, 0.98039215803146362f, 0.94117647409439087f);
+		// Color.FromRgb(34, 139, 34)
+		public static readonly Color ForestGreen = new Color(0.13333334028720856f, 0.545098066329956f, 0.13333334028720856f);
+		// Color.FromRgb(255, 0, 255)
+		public static readonly Color Fuchsia = new Color(1f, 0f, 1f);
+		// Color.FromRgb(255, 0, 255)
 		[Obsolete("Fuschia is obsolete as of version 1.3.0. Please use Fuchsia instead.")]
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public static readonly Color Fuschia = FromRgb(255, 0, 255);
-		public static readonly Color Gainsboro = FromRgb(220, 220, 220);
-		public static readonly Color GhostWhite = FromRgb(248, 248, 255);
-		public static readonly Color Gold = FromRgb(255, 215, 0);
-		public static readonly Color Goldenrod = FromRgb(218, 165, 32);
-		public static readonly Color Gray = FromRgb(128, 128, 128);
-		public static readonly Color Green = FromRgb(0, 128, 0);
-		public static readonly Color GreenYellow = FromRgb(173, 255, 47);
-		public static readonly Color Honeydew = FromRgb(240, 255, 240);
-		public static readonly Color HotPink = FromRgb(255, 105, 180);
-		public static readonly Color IndianRed = FromRgb(205, 92, 92);
-		public static readonly Color Indigo = FromRgb(75, 0, 130);
-		public static readonly Color Ivory = FromRgb(255, 255, 240);
-		public static readonly Color Khaki = FromRgb(240, 230, 140);
-		public static readonly Color Lavender = FromRgb(230, 230, 250);
-		public static readonly Color LavenderBlush = FromRgb(255, 240, 245);
-		public static readonly Color LawnGreen = FromRgb(124, 252, 0);
-		public static readonly Color LemonChiffon = FromRgb(255, 250, 205);
-		public static readonly Color LightBlue = FromRgb(173, 216, 230);
-		public static readonly Color LightCoral = FromRgb(240, 128, 128);
-		public static readonly Color LightCyan = FromRgb(224, 255, 255);
-		public static readonly Color LightGoldenrodYellow = FromRgb(250, 250, 210);
-		public static readonly Color LightGray = FromRgb(211, 211, 211);
-		public static readonly Color LightGreen = FromRgb(144, 238, 144);
-		public static readonly Color LightPink = FromRgb(255, 182, 193);
-		public static readonly Color LightSalmon = FromRgb(255, 160, 122);
-		public static readonly Color LightSeaGreen = FromRgb(32, 178, 170);
-		public static readonly Color LightSkyBlue = FromRgb(135, 206, 250);
-		public static readonly Color LightSlateGray = FromRgb(119, 136, 153);
-		public static readonly Color LightSteelBlue = FromRgb(176, 196, 222);
-		public static readonly Color LightYellow = FromRgb(255, 255, 224);
-		public static readonly Color Lime = FromRgb(0, 255, 0);
-		public static readonly Color LimeGreen = FromRgb(50, 205, 50);
-		public static readonly Color Linen = FromRgb(250, 240, 230);
-		public static readonly Color Magenta = FromRgb(255, 0, 255);
-		public static readonly Color Maroon = FromRgb(128, 0, 0);
-		public static readonly Color MediumAquamarine = FromRgb(102, 205, 170);
-		public static readonly Color MediumBlue = FromRgb(0, 0, 205);
-		public static readonly Color MediumOrchid = FromRgb(186, 85, 211);
-		public static readonly Color MediumPurple = FromRgb(147, 112, 219);
-		public static readonly Color MediumSeaGreen = FromRgb(60, 179, 113);
-		public static readonly Color MediumSlateBlue = FromRgb(123, 104, 238);
-		public static readonly Color MediumSpringGreen = FromRgb(0, 250, 154);
-		public static readonly Color MediumTurquoise = FromRgb(72, 209, 204);
-		public static readonly Color MediumVioletRed = FromRgb(199, 21, 133);
-		public static readonly Color MidnightBlue = FromRgb(25, 25, 112);
-		public static readonly Color MintCream = FromRgb(245, 255, 250);
-		public static readonly Color MistyRose = FromRgb(255, 228, 225);
-		public static readonly Color Moccasin = FromRgb(255, 228, 181);
-		public static readonly Color NavajoWhite = FromRgb(255, 222, 173);
-		public static readonly Color Navy = FromRgb(0, 0, 128);
-		public static readonly Color OldLace = FromRgb(253, 245, 230);
-		public static readonly Color Olive = FromRgb(128, 128, 0);
-		public static readonly Color OliveDrab = FromRgb(107, 142, 35);
-		public static readonly Color Orange = FromRgb(255, 165, 0);
-		public static readonly Color OrangeRed = FromRgb(255, 69, 0);
-		public static readonly Color Orchid = FromRgb(218, 112, 214);
-		public static readonly Color PaleGoldenrod = FromRgb(238, 232, 170);
-		public static readonly Color PaleGreen = FromRgb(152, 251, 152);
-		public static readonly Color PaleTurquoise = FromRgb(175, 238, 238);
-		public static readonly Color PaleVioletRed = FromRgb(219, 112, 147);
-		public static readonly Color PapayaWhip = FromRgb(255, 239, 213);
-		public static readonly Color PeachPuff = FromRgb(255, 218, 185);
-		public static readonly Color Peru = FromRgb(205, 133, 63);
-		public static readonly Color Pink = FromRgb(255, 192, 203);
-		public static readonly Color Plum = FromRgb(221, 160, 221);
-		public static readonly Color PowderBlue = FromRgb(176, 224, 230);
-		public static readonly Color Purple = FromRgb(128, 0, 128);
-		public static readonly Color Red = FromRgb(255, 0, 0);
-		public static readonly Color RosyBrown = FromRgb(188, 143, 143);
-		public static readonly Color RoyalBlue = FromRgb(65, 105, 225);
-		public static readonly Color SaddleBrown = FromRgb(139, 69, 19);
-		public static readonly Color Salmon = FromRgb(250, 128, 114);
-		public static readonly Color SandyBrown = FromRgb(244, 164, 96);
-		public static readonly Color SeaGreen = FromRgb(46, 139, 87);
-		public static readonly Color SeaShell = FromRgb(255, 245, 238);
-		public static readonly Color Sienna = FromRgb(160, 82, 45);
-		public static readonly Color Silver = FromRgb(192, 192, 192);
-		public static readonly Color SkyBlue = FromRgb(135, 206, 235);
-		public static readonly Color SlateBlue = FromRgb(106, 90, 205);
-		public static readonly Color SlateGray = FromRgb(112, 128, 144);
-		public static readonly Color Snow = FromRgb(255, 250, 250);
-		public static readonly Color SpringGreen = FromRgb(0, 255, 127);
-		public static readonly Color SteelBlue = FromRgb(70, 130, 180);
-		public static readonly Color Tan = FromRgb(210, 180, 140);
-		public static readonly Color Teal = FromRgb(0, 128, 128);
-		public static readonly Color Thistle = FromRgb(216, 191, 216);
-		public static readonly Color Tomato = FromRgb(255, 99, 71);
-		public static readonly Color Transparent = FromRgba(255, 255, 255, 0);
-		public static readonly Color Turquoise = FromRgb(64, 224, 208);
-		public static readonly Color Violet = FromRgb(238, 130, 238);
-		public static readonly Color Wheat = FromRgb(245, 222, 179);
-		public static readonly Color White = FromRgb(255, 255, 255);
-		public static readonly Color WhiteSmoke = FromRgb(245, 245, 245);
-		public static readonly Color Yellow = FromRgb(255, 255, 0);
-		public static readonly Color YellowGreen = FromRgb(154, 205, 50);
+		public static readonly Color Fuschia = new Color(1f, 0f, 1f);
+		// Color.FromRgb(220, 220, 220)
+		public static readonly Color Gainsboro = new Color(0.86274510622024536f, 0.86274510622024536f, 0.86274510622024536f);
+		// Color.FromRgb(248, 248, 255)
+		public static readonly Color GhostWhite = new Color(0.97254902124404907f, 0.97254902124404907f, 1f);
+		// Color.FromRgb(255, 215, 0)
+		public static readonly Color Gold = new Color(1f, 0.843137264251709f, 0f);
+		// Color.FromRgb(218, 165, 32)
+		public static readonly Color Goldenrod = new Color(0.85490196943283081f, 0.64705884456634521f, 0.125490203499794f);
+		// Color.FromRgb(128, 128, 128)
+		public static readonly Color Gray = new Color(0.501960813999176f, 0.501960813999176f, 0.501960813999176f);
+		// Color.FromRgb(0, 128, 0)
+		public static readonly Color Green = new Color(0f, 0.501960813999176f, 0f);
+		// Color.FromRgb(173, 255, 47)
+		public static readonly Color GreenYellow = new Color(0.67843139171600342f, 1f, 0.18431372940540314f);
+		// Color.FromRgb(240, 255, 240)
+		public static readonly Color Honeydew = new Color(0.94117647409439087f, 1f, 0.94117647409439087f);
+		// Color.FromRgb(255, 105, 180)
+		public static readonly Color HotPink = new Color(1f, 0.4117647111415863f, 0.70588237047195435f);
+		// Color.FromRgb(205, 92, 92)
+		public static readonly Color IndianRed = new Color(0.80392158031463623f, 0.36078432202339172f, 0.36078432202339172f);
+		// Color.FromRgb(75, 0, 130)
+		public static readonly Color Indigo = new Color(0.29411765933036804f, 0f, 0.50980395078659058f);
+		// Color.FromRgb(255, 255, 240)
+		public static readonly Color Ivory = new Color(1f, 1f, 0.94117647409439087f);
+		// Color.FromRgb(240, 230, 140)
+		public static readonly Color Khaki = new Color(0.94117647409439087f, 0.90196079015731812f, 0.54901963472366333f);
+		// Color.FromRgb(230, 230, 250)
+		public static readonly Color Lavender = new Color(0.90196079015731812f, 0.90196079015731812f, 0.98039215803146362f);
+		// Color.FromRgb(255, 240, 245)
+		public static readonly Color LavenderBlush = new Color(1f, 0.94117647409439087f, 0.96078431606292725f);
+		// Color.FromRgb(124, 252, 0)
+		public static readonly Color LawnGreen = new Color(0.48627451062202454f, 0.98823529481887817f, 0f);
+		// Color.FromRgb(255, 250, 205)
+		public static readonly Color LemonChiffon = new Color(1f, 0.98039215803146362f, 0.80392158031463623f);
+		// Color.FromRgb(173, 216, 230)
+		public static readonly Color LightBlue = new Color(0.67843139171600342f, 0.84705883264541626f, 0.90196079015731812f);
+		// Color.FromRgb(240, 128, 128)
+		public static readonly Color LightCoral = new Color(0.94117647409439087f, 0.501960813999176f, 0.501960813999176f);
+		// Color.FromRgb(224, 255, 255)
+		public static readonly Color LightCyan = new Color(0.87843137979507446f, 1f, 1f);
+		// Color.FromRgb(250, 250, 210)
+		public static readonly Color LightGoldenrodYellow = new Color(0.98039215803146362f, 0.98039215803146362f, 0.82352942228317261f);
+		// Color.FromRgb(211, 211, 211)
+		public static readonly Color LightGray = new Color(0.82745099067687988f, 0.82745099067687988f, 0.82745099067687988f);
+		// Color.FromRgb(144, 238, 144)
+		public static readonly Color LightGreen = new Color(0.56470590829849243f, 0.93333333730697632f, 0.56470590829849243f);
+		// Color.FromRgb(255, 182, 193)
+		public static readonly Color LightPink = new Color(1f, 0.7137255072593689f, 0.75686275959014893f);
+		// Color.FromRgb(255, 160, 122)
+		public static readonly Color LightSalmon = new Color(1f, 0.62745100259780884f, 0.47843137383461f);
+		// Color.FromRgb(32, 178, 170)
+		public static readonly Color LightSeaGreen = new Color(0.125490203499794f, 0.69803923368453979f, 0.66666668653488159f);
+		// Color.FromRgb(135, 206, 250)
+		public static readonly Color LightSkyBlue = new Color(0.529411792755127f, 0.80784314870834351f, 0.98039215803146362f);
+		// Color.FromRgb(119, 136, 153)
+		public static readonly Color LightSlateGray = new Color(0.46666666865348816f, 0.53333336114883423f, 0.60000002384185791f);
+		// Color.FromRgb(176, 196, 222)
+		public static readonly Color LightSteelBlue = new Color(0.69019609689712524f, 0.76862746477127075f, 0.87058824300765991f);
+		// Color.FromRgb(255, 255, 224)
+		public static readonly Color LightYellow = new Color(1f, 1f, 0.87843137979507446f);
+		// Color.FromRgb(0, 255, 0)
+		public static readonly Color Lime = new Color(0f, 1f, 0f);
+		// Color.FromRgb(50, 205, 50)
+		public static readonly Color LimeGreen = new Color(0.19607843458652496f, 0.80392158031463623f, 0.19607843458652496f);
+		// Color.FromRgb(250, 240, 230)
+		public static readonly Color Linen = new Color(0.98039215803146362f, 0.94117647409439087f, 0.90196079015731812f);
+		// Color.FromRgb(255, 0, 255)
+		public static readonly Color Magenta = new Color(1f, 0f, 1f);
+		// Color.FromRgb(128, 0, 0)
+		public static readonly Color Maroon = new Color(0.501960813999176f, 0f, 0f);
+		// Color.FromRgb(102, 205, 170)
+		public static readonly Color MediumAquamarine = new Color(0.40000000596046448f, 0.80392158031463623f, 0.66666668653488159f);
+		// Color.FromRgb(0, 0, 205)
+		public static readonly Color MediumBlue = new Color(0f, 0f, 0.80392158031463623f);
+		// Color.FromRgb(186, 85, 211)
+		public static readonly Color MediumOrchid = new Color(0.729411780834198f, 0.3333333432674408f, 0.82745099067687988f);
+		// Color.FromRgb(147, 112, 219)
+		public static readonly Color MediumPurple = new Color(0.57647061347961426f, 0.43921568989753723f, 0.85882353782653809f);
+		// Color.FromRgb(60, 179, 113)
+		public static readonly Color MediumSeaGreen = new Color(0.23529411852359772f, 0.70196080207824707f, 0.44313725829124451f);
+		// Color.FromRgb(123, 104, 238)
+		public static readonly Color MediumSlateBlue = new Color(0.48235294222831726f, 0.40784314274787903f, 0.93333333730697632f);
+		// Color.FromRgb(0, 250, 154)
+		public static readonly Color MediumSpringGreen = new Color(0f, 0.98039215803146362f, 0.60392159223556519f);
+		// Color.FromRgb(72, 209, 204)
+		public static readonly Color MediumTurquoise = new Color(0.28235295414924622f, 0.81960785388946533f, 0.800000011920929f);
+		// Color.FromRgb(199, 21, 133)
+		public static readonly Color MediumVioletRed = new Color(0.78039216995239258f, 0.08235294371843338f, 0.5215686559677124f);
+		// Color.FromRgb(25, 25, 112)
+		public static readonly Color MidnightBlue = new Color(0.098039217293262482f, 0.098039217293262482f, 0.43921568989753723f);
+		// Color.FromRgb(245, 255, 250)
+		public static readonly Color MintCream = new Color(0.96078431606292725f, 1f, 0.98039215803146362f);
+		// Color.FromRgb(255, 228, 225)
+		public static readonly Color MistyRose = new Color(1f, 0.89411765336990356f, 0.88235294818878174f);
+		// Color.FromRgb(255, 228, 181)
+		public static readonly Color Moccasin = new Color(1f, 0.89411765336990356f, 0.70980393886566162f);
+		// Color.FromRgb(255, 222, 173)
+		public static readonly Color NavajoWhite = new Color(1f, 0.87058824300765991f, 0.67843139171600342f);
+		// Color.FromRgb(0, 0, 128)
+		public static readonly Color Navy = new Color(0f, 0f, 0.501960813999176f);
+		// Color.FromRgb(253, 245, 230)
+		public static readonly Color OldLace = new Color(0.99215686321258545f, 0.96078431606292725f, 0.90196079015731812f);
+		// Color.FromRgb(128, 128, 0)
+		public static readonly Color Olive = new Color(0.501960813999176f, 0.501960813999176f, 0f);
+		// Color.FromRgb(107, 142, 35)
+		public static readonly Color OliveDrab = new Color(0.41960784792900085f, 0.55686277151107788f, 0.13725490868091583f);
+		// Color.FromRgb(255, 165, 0)
+		public static readonly Color Orange = new Color(1f, 0.64705884456634521f, 0f);
+		// Color.FromRgb(255, 69, 0)
+		public static readonly Color OrangeRed = new Color(1f, 0.27058824896812439f, 0f);
+		// Color.FromRgb(218, 112, 214)
+		public static readonly Color Orchid = new Color(0.85490196943283081f, 0.43921568989753723f, 0.83921569585800171f);
+		// Color.FromRgb(238, 232, 170)
+		public static readonly Color PaleGoldenrod = new Color(0.93333333730697632f, 0.90980392694473267f, 0.66666668653488159f);
+		// Color.FromRgb(152, 251, 152)
+		public static readonly Color PaleGreen = new Color(0.59607845544815063f, 0.9843137264251709f, 0.59607845544815063f);
+		// Color.FromRgb(175, 238, 238)
+		public static readonly Color PaleTurquoise = new Color(0.686274528503418f, 0.93333333730697632f, 0.93333333730697632f);
+		// Color.FromRgb(219, 112, 147)
+		public static readonly Color PaleVioletRed = new Color(0.85882353782653809f, 0.43921568989753723f, 0.57647061347961426f);
+		// Color.FromRgb(255, 239, 213)
+		public static readonly Color PapayaWhip = new Color(1f, 0.93725490570068359f, 0.83529412746429443f);
+		// Color.FromRgb(255, 218, 185)
+		public static readonly Color PeachPuff = new Color(1f, 0.85490196943283081f, 0.72549021244049072f);
+		// Color.FromRgb(205, 133, 63)
+		public static readonly Color Peru = new Color(0.80392158031463623f, 0.5215686559677124f, 0.24705882370471954f);
+		// Color.FromRgb(255, 192, 203)
+		public static readonly Color Pink = new Color(1f, 0.75294119119644165f, 0.79607844352722168f);
+		// Color.FromRgb(221, 160, 221)
+		public static readonly Color Plum = new Color(0.86666667461395264f, 0.62745100259780884f, 0.86666667461395264f);
+		// Color.FromRgb(176, 224, 230)
+		public static readonly Color PowderBlue = new Color(0.69019609689712524f, 0.87843137979507446f, 0.90196079015731812f);
+		// Color.FromRgb(128, 0, 128)
+		public static readonly Color Purple = new Color(0.501960813999176f, 0f, 0.501960813999176f);
+		// Color.FromRgb(255, 0, 0)
+		public static readonly Color Red = new Color(1f, 0f, 0f);
+		// Color.FromRgb(188, 143, 143)
+		public static readonly Color RosyBrown = new Color(0.73725491762161255f, 0.56078433990478516f, 0.56078433990478516f);
+		// Color.FromRgb(65, 105, 225)
+		public static readonly Color RoyalBlue = new Color(0.25490197539329529f, 0.4117647111415863f, 0.88235294818878174f);
+		// Color.FromRgb(139, 69, 19)
+		public static readonly Color SaddleBrown = new Color(0.545098066329956f, 0.27058824896812439f, 0.074509806931018829f);
+		// Color.FromRgb(250, 128, 114)
+		public static readonly Color Salmon = new Color(0.98039215803146362f, 0.501960813999176f, 0.44705882668495178f);
+		// Color.FromRgb(244, 164, 96)
+		public static readonly Color SandyBrown = new Color(0.95686274766922f, 0.64313727617263794f, 0.37647059559822083f);
+		// Color.FromRgb(46, 139, 87)
+		public static readonly Color SeaGreen = new Color(0.18039216101169586f, 0.545098066329956f, 0.34117648005485535f);
+		// Color.FromRgb(255, 245, 238)
+		public static readonly Color SeaShell = new Color(1f, 0.96078431606292725f, 0.93333333730697632f);
+		// Color.FromRgb(160, 82, 45)
+		public static readonly Color Sienna = new Color(0.62745100259780884f, 0.32156863808631897f, 0.17647059261798859f);
+		// Color.FromRgb(192, 192, 192)
+		public static readonly Color Silver = new Color(0.75294119119644165f, 0.75294119119644165f, 0.75294119119644165f);
+		// Color.FromRgb(135, 206, 235)
+		public static readonly Color SkyBlue = new Color(0.529411792755127f, 0.80784314870834351f, 0.92156863212585449f);
+		// Color.FromRgb(106, 90, 205)
+		public static readonly Color SlateBlue = new Color(0.41568627953529358f, 0.35294118523597717f, 0.80392158031463623f);
+		// Color.FromRgb(112, 128, 144)
+		public static readonly Color SlateGray = new Color(0.43921568989753723f, 0.501960813999176f, 0.56470590829849243f);
+		// Color.FromRgb(255, 250, 250)
+		public static readonly Color Snow = new Color(1f, 0.98039215803146362f, 0.98039215803146362f);
+		// Color.FromRgb(0, 255, 127)
+		public static readonly Color SpringGreen = new Color(0f, 1f, 0.49803921580314636f);
+		// Color.FromRgb(70, 130, 180)
+		public static readonly Color SteelBlue = new Color(0.27450981736183167f, 0.50980395078659058f, 0.70588237047195435f);
+		// Color.FromRgb(210, 180, 140)
+		public static readonly Color Tan = new Color(0.82352942228317261f, 0.70588237047195435f, 0.54901963472366333f);
+		// Color.FromRgb(0, 128, 128)
+		public static readonly Color Teal = new Color(0f, 0.501960813999176f, 0.501960813999176f);
+		// Color.FromRgb(216, 191, 216)
+		public static readonly Color Thistle = new Color(0.84705883264541626f, 0.74901962280273438f, 0.84705883264541626f);
+		// Color.FromRgb(255, 99, 71)
+		public static readonly Color Tomato = new Color(1f, 0.38823530077934265f, 0.27843138575553894f);
+		// Color.FromRgba(255, 255, 255, 0)
+		public static readonly Color Transparent = new Color(1f, 1f, 1f, 0f);
+		// Color.FromRgb(64, 224, 208)
+		public static readonly Color Turquoise = new Color(0.250980406999588f, 0.87843137979507446f, 0.81568628549575806f);
+		// Color.FromRgb(238, 130, 238)
+		public static readonly Color Violet = new Color(0.93333333730697632f, 0.50980395078659058f, 0.93333333730697632f);
+		// Color.FromRgb(245, 222, 179)
+		public static readonly Color Wheat = new Color(0.96078431606292725f, 0.87058824300765991f, 0.70196080207824707f);
+		// Color.FromRgb(255, 255, 255)
+		public static readonly Color White = new Color(1f, 1f, 1f);
+		// Color.FromRgb(245, 245, 245)
+		public static readonly Color WhiteSmoke = new Color(0.96078431606292725f, 0.96078431606292725f, 0.96078431606292725f);
+		// Color.FromRgb(255, 255, 0)
+		public static readonly Color Yellow = new Color(1f, 1f, 0f);
+		// Color.FromRgb(154, 205, 50)
+		public static readonly Color YellowGreen = new Color(0.60392159223556519f, 0.80392158031463623f, 0.19607843458652496f);
 
 		#endregion
 	}

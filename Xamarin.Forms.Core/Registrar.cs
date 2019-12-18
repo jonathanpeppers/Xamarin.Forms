@@ -331,7 +331,8 @@ namespace Xamarin.Forms.Internals
 			Profile.FramePartition("Reflect");
 			foreach (Assembly assembly in assemblies)
 			{
-				Profile.FrameBegin(assembly.GetName().Name);
+				if (Profile.IsEnabled)
+					Profile.FrameBegin(assembly.GetName().Name);
 
 				foreach (Type attrType in attrTypes)
 				{

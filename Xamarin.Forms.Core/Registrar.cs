@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Xamarin.Forms.Core;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.StyleSheets;
 
@@ -28,10 +29,16 @@ namespace Xamarin.Forms.Internals
 	public class Registrar<TRegistrable> where TRegistrable : class
 	{
 		readonly Dictionary<Type, Dictionary<Type, (Type target, short priority)>> _handlers = new Dictionary<Type, Dictionary<Type, (Type target, short priority)>>();
+		Dictionary<Type, Func<RenderWithAttribute>> _renderWith;
 		static Type _defaultVisualType = typeof(VisualMarker.DefaultVisual);
 		static Type _materialVisualType = typeof(VisualMarker.MaterialVisual);
 
 		static Type[] _defaultVisualRenderers = new[] { _defaultVisualType };
+
+		public void Register(AssemblyAttributesProvider provider)
+		{
+			_renderWith = provider.GetRenderWithAttributes();
+		}
 
 		public void Register(Type tview, Type trender, Type[] supportedVisuals, short priority)
 		{
@@ -197,46 +204,10 @@ namespace Xamarin.Forms.Internals
 					!(visualRenderers.ContainsKey(visualType) ||
 					  visualRenderers.ContainsKey(_defaultVisualType)))
 				{
-					// get RenderWith attribute for just this type, do not inherit attributes from base types
-					var attribute = viewType.GetTypeInfo().GetCustomAttributes<RenderWithAttribute>(false).FirstOrDefault();
-					if (attribute == null)
+					// get RenderWith attribute for just this type
+					if (_renderWith != null && _renderWith.TryGetValue (viewType, out Func<RenderWithAttribute> attribute))
 					{
-						// TODO this doesn't appear to do anything. Register just returns as a NOOP if the renderer is null
-						Register(viewType, null, new[] { visualType }); // Cache this result so we don't have to do GetCustomAttributes again
-					}
-					else
-					{
-						Type specificTypeRenderer = attribute.Type;
-
-						if (specificTypeRenderer.Name.StartsWith("_", StringComparison.Ordinal))
-						{
-							// TODO: Remove attribute2 once renderer names have been unified across all platforms
-							var attribute2 = specificTypeRenderer.GetTypeInfo().GetCustomAttribute<RenderWithAttribute>();
-							if (attribute2 != null)
-							{
-								for (int i = 0; i < attribute2.SupportedVisuals.Length; i++)
-								{
-									if (attribute2.SupportedVisuals[i] == _defaultVisualType)
-										specificTypeRenderer = attribute2.Type;
-
-									if (attribute2.SupportedVisuals[i] == visualType)
-									{
-										specificTypeRenderer = attribute2.Type;
-										break;
-									}
-								}
-							}
-
-							if (specificTypeRenderer.Name.StartsWith("_", StringComparison.Ordinal))
-							{
-								Register(viewType, null, new[] { visualType }); // Cache this result so we don't work through this chain again
-
-								viewType = viewType.GetTypeInfo().BaseType;
-								continue;
-							}
-						}
-
-						Register(viewType, specificTypeRenderer, new[] { visualType }); // Register this so we don't have to look for the RenderWithAttibute again in the future
+						Register(viewType, attribute().Type, new[] { visualType });
 					}
 				}
 
@@ -254,17 +225,45 @@ namespace Xamarin.Forms.Internals
 		}
 
 		internal static Dictionary<string, Type> Effects { get; } = new Dictionary<string, Type>();
-		internal static Dictionary<string, IList<StyleSheets.StylePropertyAttribute>> StyleProperties { get; } = new Dictionary<string, IList<StyleSheets.StylePropertyAttribute>>();
+		internal static Dictionary<string, IList<StylePropertyAttribute>> StyleProperties => LazyStyleProperties.Value;
+
+		static readonly Lazy<Dictionary<string, IList<StylePropertyAttribute>>> LazyStyleProperties = new Lazy<Dictionary<string, IList<StylePropertyAttribute>>>(RegisterStylesheets);
+
+		internal static AssemblyAttributesProvider PlatformProvider;
+		internal static readonly HashSet<Assembly> AssembliesToSkip = new HashSet<Assembly>
+		{
+			typeof (Registrar).GetTypeInfo().Assembly,
+		};
 
 		public static IEnumerable<Assembly> ExtraAssemblies { get; set; }
 
 		public static Registrar<IRegisterable> Registered { get; internal set; }
+
+		public static void RegisterAssemblyAttributeProviders(Type[] attrTypes, AssemblyAttributesProvider provider)
+		{
+			if (PlatformProvider != null)
+				return;
+			PlatformProvider = provider;
+			AssembliesToSkip.Add(provider.Assembly);
+			RegisterRenderers(provider.GetHandlerAttributes());
+			ExportEffectAttribute[] effectAttributes = provider.GetExportEffectAttributes();
+			if (effectAttributes != null)
+			{
+				var resolutionName = provider.GetResolutionGroupNameAttribute()?.ShortName ?? provider.Assembly.FullName;
+				RegisterEffects(resolutionName, effectAttributes);
+			}
+			DependencyService.Register(provider.GetDependencyAttributes());
+			Registered.Register(provider);
+			RegisterAll(attrTypes);
+		}
 
 		//typeof(ExportRendererAttribute);
 		//typeof(ExportCellAttribute);
 		//typeof(ExportImageSourceHandlerAttribute);
 		public static void RegisterRenderers(HandlerAttribute[] attributes)
 		{
+			if (attributes == null)
+				return;
 			var length = attributes.Length;
 			for (var i = 0; i < length; i++)
 			{
@@ -274,24 +273,17 @@ namespace Xamarin.Forms.Internals
 			}
 		}
 
-		public static void RegisterStylesheets()
+		static Dictionary<string, IList<StylePropertyAttribute>> RegisterStylesheets()
 		{
-			var assembly = typeof(StylePropertyAttribute).GetTypeInfo().Assembly;
-
-#if NETSTANDARD2_0
-			object[] styleAttributes = assembly.GetCustomAttributes(typeof(StylePropertyAttribute), true);
-#else
-			object[] styleAttributes = assembly.GetCustomAttributes(typeof(StyleSheets.StylePropertyAttribute)).ToArray();
-#endif
-			var stylePropertiesLength = styleAttributes.Length;
-			for (var i = 0; i < stylePropertiesLength; i++)
+			var properties = new Dictionary<string, IList<StylePropertyAttribute>>();
+			foreach (var attribute in StylePropertyAttribute.GetStylePropertyAttributes())
 			{
-				var attribute = (StylePropertyAttribute)styleAttributes[i];
-				if (StyleProperties.TryGetValue(attribute.CssPropertyName, out var attrList))
-					attrList.Add(attribute);
+				if (properties.TryGetValue(attribute.CssPropertyName, out var list))
+					list.Add(attribute);
 				else
-					StyleProperties[attribute.CssPropertyName] = new List<StylePropertyAttribute> { attribute };
+					properties[attribute.CssPropertyName] = new List<StylePropertyAttribute>(1) { attribute };
 			}
+			return properties;
 		}
 
 		public static void RegisterEffects(string resolutionName, ExportEffectAttribute[] effectAttributes)
@@ -305,10 +297,6 @@ namespace Xamarin.Forms.Internals
 		}
 
 		public static void RegisterAll(Type[] attrTypes)
-		{
-			RegisterAll(attrTypes, default(InitializationFlags));
-		}
-		public static void RegisterAll(Type[] attrTypes, InitializationFlags flags)
 		{
 			Profile.FrameBegin();
 
@@ -332,6 +320,10 @@ namespace Xamarin.Forms.Internals
 			foreach (Assembly assembly in assemblies)
 			{
 				Profile.FrameBegin(assembly.GetName().Name);
+				if (AssembliesToSkip.Contains (assembly))
+				{
+					continue;
+				}
 
 				foreach (Type attrType in attrTypes)
 				{
@@ -344,17 +336,16 @@ namespace Xamarin.Forms.Internals
 				object[] effectAttributes = assembly.GetCustomAttributesSafe(typeof (ExportEffectAttribute));
 				if (effectAttributes == null || effectAttributes.Length == 0)
 					continue;
-				string resolutionName = assembly.FullName;
+				string resolutionName;
 				var resolutionNameAttribute = (ResolutionGroupNameAttribute)assembly.GetCustomAttribute(typeof(ResolutionGroupNameAttribute));
 				if (resolutionNameAttribute != null)
 					resolutionName = resolutionNameAttribute.ShortName;
+				else
+					resolutionName = assembly.FullName;
 				RegisterEffects(resolutionName, (ExportEffectAttribute[])effectAttributes);
 
 				Profile.FrameEnd();
 			}
-
-			if ((flags & InitializationFlags.DisableCss) == 0)
-				RegisterStylesheets();
 
 			Profile.FramePartition("DependencyService.Initialize");
 			DependencyService.Initialize(assemblies);

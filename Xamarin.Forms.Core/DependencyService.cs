@@ -113,21 +113,25 @@ namespace Xamarin.Forms
 				// Naive implementation can easily take over a second to run
 				foreach (Assembly assembly in assemblies)
 				{
-					object[] attributes = assembly.GetCustomAttributesSafe(typeof(DependencyAttribute));
-					if (attributes == null)
+					if (Internals.Registrar.AssembliesToSkip.Contains(assembly))
 						continue;
-
-					for (int i = 0; i < attributes.Length; i++)
-					{
-						DependencyAttribute attribute = (DependencyAttribute)attributes[i];
-						if (!DependencyTypes.Contains(attribute.Implementor))
-						{
-							DependencyTypes.Add(attribute.Implementor);
-						}
-					}
+					Register((DependencyAttribute[])assembly.GetCustomAttributesSafe(typeof(DependencyAttribute)));
 				}
 
 				s_initialized = true;
+			}
+		}
+
+		internal static void Register (DependencyAttribute[] attributes)
+		{
+			if (attributes == null)
+				return;
+			foreach (var attribute in attributes)
+			{
+				if (!DependencyTypes.Contains(attribute.Implementor))
+				{
+					DependencyTypes.Add(attribute.Implementor);
+				}
 			}
 		}
 

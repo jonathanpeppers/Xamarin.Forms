@@ -303,20 +303,15 @@ namespace Xamarin.Forms
 							Registrar.RegisterEffects(effectScope.Name, effectScope.Effects);
 						}
 					}
-
-					// css
-					var noCss = (flags & InitializationFlags.DisableCss) != 0;
-					if (!noCss)
-						Registrar.RegisterStylesheets();
 				}
 				else
 				{
 					// Only need to do this once
-					Registrar.RegisterAll(new[] {
+					Registrar.RegisterAssemblyAttributeProviders(new[] {
 						typeof(ExportRendererAttribute),
 						typeof(ExportCellAttribute),
 						typeof(ExportImageSourceHandlerAttribute)
-					});
+					}, new AndroidAssemblyAttributesProvider());
 				}
 			}
 

@@ -313,9 +313,7 @@ namespace Xamarin.Forms
 					}
 
 					// css
-					var noCss = (flags & InitializationFlags.DisableCss) != 0;
-					if (!noCss)
-						Registrar.RegisterStylesheets();
+					Registrar.RegisterStylesheets(flags);
 				}
 				else
 				{

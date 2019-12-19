@@ -254,7 +254,10 @@ namespace Xamarin.Forms.Internals
 		}
 
 		internal static Dictionary<string, Type> Effects { get; } = new Dictionary<string, Type>();
-		internal static Dictionary<string, IList<StyleSheets.StylePropertyAttribute>> StyleProperties { get; } = new Dictionary<string, IList<StyleSheets.StylePropertyAttribute>>();
+		internal static Dictionary<string, IList<StylePropertyAttribute>> StyleProperties => LazyStyleProperties.Value;
+
+		static bool DisableCSS = false;
+		static readonly Lazy<Dictionary<string, IList<StylePropertyAttribute>>> LazyStyleProperties = new Lazy<Dictionary<string, IList<StylePropertyAttribute>>>(RegisterStylesheets);
 
 		public static IEnumerable<Assembly> ExtraAssemblies { get; set; }
 
@@ -274,24 +277,23 @@ namespace Xamarin.Forms.Internals
 			}
 		}
 
-		public static void RegisterStylesheets()
+		static Dictionary<string, IList<StylePropertyAttribute>> RegisterStylesheets()
 		{
+			var properties = new Dictionary<string, IList<StylePropertyAttribute>>();
+			if (DisableCSS)
+				return properties;
 			var assembly = typeof(StylePropertyAttribute).GetTypeInfo().Assembly;
-
-#if NETSTANDARD2_0
-			object[] styleAttributes = assembly.GetCustomAttributes(typeof(StylePropertyAttribute), true);
-#else
-			object[] styleAttributes = assembly.GetCustomAttributes(typeof(StyleSheets.StylePropertyAttribute)).ToArray();
-#endif
-			var stylePropertiesLength = styleAttributes.Length;
+			var styleAttributes = assembly.GetCustomAttributesSafe(typeof(StylePropertyAttribute));
+			var stylePropertiesLength = styleAttributes?.Length ?? 0;
 			for (var i = 0; i < stylePropertiesLength; i++)
 			{
 				var attribute = (StylePropertyAttribute)styleAttributes[i];
-				if (StyleProperties.TryGetValue(attribute.CssPropertyName, out var attrList))
+				if (properties.TryGetValue(attribute.CssPropertyName, out var attrList))
 					attrList.Add(attribute);
 				else
-					StyleProperties[attribute.CssPropertyName] = new List<StylePropertyAttribute> { attribute };
+					properties[attribute.CssPropertyName] = new List<StylePropertyAttribute> { attribute };
 			}
+			return properties;
 		}
 
 		public static void RegisterEffects(string resolutionName, ExportEffectAttribute[] effectAttributes)
@@ -354,8 +356,8 @@ namespace Xamarin.Forms.Internals
 				Profile.FrameEnd();
 			}
 
-			if ((flags & InitializationFlags.DisableCss) == 0)
-				RegisterStylesheets();
+			if ((flags & InitializationFlags.DisableCss) == InitializationFlags.DisableCss)
+				DisableCSS = true;
 
 			Profile.FramePartition("DependencyService.Initialize");
 			DependencyService.Initialize(assemblies);

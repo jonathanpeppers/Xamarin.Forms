@@ -303,11 +303,6 @@ namespace Xamarin.Forms
 							Registrar.RegisterEffects(effectScope.Name, effectScope.Effects);
 						}
 					}
-
-					// css
-					var noCss = (flags & InitializationFlags.DisableCss) != 0;
-					if (!noCss)
-						Registrar.RegisterStylesheets();
 				}
 				else
 				{

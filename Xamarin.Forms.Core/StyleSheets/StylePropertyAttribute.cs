@@ -2,8 +2,7 @@ using System;
 
 namespace Xamarin.Forms.StyleSheets
 {
-	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true, Inherited = true)]
-	sealed class StylePropertyAttribute : Attribute
+	sealed class StylePropertyAttribute
 	{
 		public string CssPropertyName { get; }
 		public string BindablePropertyName { get; }
@@ -18,6 +17,22 @@ namespace Xamarin.Forms.StyleSheets
 			CssPropertyName = cssPropertyName;
 			BindablePropertyName = bindablePropertyName;
 			TargetType = targetType;
+		}
+
+		public StylePropertyAttribute(string cssPropertyName, Type targetType, string bindablePropertyName, bool inherited)
+		{
+			CssPropertyName = cssPropertyName;
+			BindablePropertyName = bindablePropertyName;
+			TargetType = targetType;
+			Inherited = inherited;
+		}
+
+		public StylePropertyAttribute(string cssPropertyName, Type targetType, string bindablePropertyName, Type propertyOwnerType)
+		{
+			CssPropertyName = cssPropertyName;
+			BindablePropertyName = bindablePropertyName;
+			TargetType = targetType;
+			PropertyOwnerType = propertyOwnerType;
 		}
 	}
 }

@@ -121,7 +121,7 @@ for ($i = 1; $i -le $iterations; $i++)
 {
     Write-Host "Launching: $package"
     & $adb shell am force-stop $package
-    & $msbuild $project /v:minimal /nologo /t:_Run
+    & $msbuild $project /v:minimal /nologo /t:_Run /p:Configuration=$configuration
     Start-Sleep -Seconds $sleep
 }
 

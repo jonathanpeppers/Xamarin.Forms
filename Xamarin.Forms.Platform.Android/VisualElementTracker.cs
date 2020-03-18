@@ -286,7 +286,6 @@ namespace Xamarin.Forms.Platform.Android
 				aview.Visibility = ViewStates.Gone;
 		}
 
-		[ThreadStatic]
 		readonly static BatchUpdateRequest _batchUpdateRequest = new BatchUpdateRequest();
 
 		void UpdateNativeView(object sender, EventArgs e)
@@ -296,28 +295,29 @@ namespace Xamarin.Forms.Platform.Android
 			VisualElement view = _renderer.Element;
 			AView aview = _renderer.View;
 
-			_batchUpdateRequest.PivotX = (float)(view.AnchorX * _context.ToPixels(view.Width));
-			_batchUpdateRequest.PivotY = (float)(view.AnchorY * _context.ToPixels(view.Height));
-			_batchUpdateRequest.Visibility = (int)(view.IsVisible ? ViewStates.Visible : ViewStates.Invisible);
-			_batchUpdateRequest.Enabled = view.IsEnabled;
-			_batchUpdateRequest.Opacity = (float)view.Opacity;
-			_batchUpdateRequest.Rotation = (float)view.Rotation;
-			_batchUpdateRequest.RotationX = (float)view.RotationX;
-			_batchUpdateRequest.RotationY = (float)view.RotationY;
-			_batchUpdateRequest.ScaleX = (float)(view.Scale * view.ScaleX);
-			_batchUpdateRequest.ScaleY = (float)(view.Scale * view.ScaleY);
-			_batchUpdateRequest.TranslationX = _context.ToPixels(view.TranslationX);
-			_batchUpdateRequest.TranslationY = _context.ToPixels(view.TranslationY);
+			var request = _batchUpdateRequest;
+			request.PivotX = (float)(view.AnchorX * _context.ToPixels(view.Width));
+			request.PivotY = (float)(view.AnchorY * _context.ToPixels(view.Height));
+			request.Visibility = (int)(view.IsVisible ? ViewStates.Visible : ViewStates.Invisible);
+			request.Enabled = view.IsEnabled;
+			request.Opacity = (float)view.Opacity;
+			request.Rotation = (float)view.Rotation;
+			request.RotationX = (float)view.RotationX;
+			request.RotationY = (float)view.RotationY;
+			request.ScaleX = (float)(view.Scale * view.ScaleX);
+			request.ScaleY = (float)(view.Scale * view.ScaleY);
+			request.TranslationX = _context.ToPixels(view.TranslationX);
+			request.TranslationY = _context.ToPixels(view.TranslationY);
 			if (aview is FormsViewGroup formsViewGroup)
 			{
-				_batchUpdateRequest.View = null;
-				formsViewGroup.SendBatchUpdate(_batchUpdateRequest);
+				request.View = null;
+				formsViewGroup.SendBatchUpdate(request);
 			}
 			else
 			{
-				_batchUpdateRequest.View = aview;
-				FormsViewGroup.SendViewBatchUpdate(_batchUpdateRequest);
-				_batchUpdateRequest.View = null;
+				request.View = aview;
+				FormsViewGroup.SendViewBatchUpdate(request);
+				request.View = null;
 			}
 
 			Performance.Stop(reference);

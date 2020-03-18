@@ -1,34 +1,21 @@
 package com.xamarin.forms.platform.android;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.ViewGroup;
 import android.view.*;
-import android.widget.TextView;
-
-import static android.R.attr.pivotX;
 
 public class FormsViewGroup extends ViewGroup {
 
 	public FormsViewGroup(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 	public FormsViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 
 	public FormsViewGroup(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void measureAndLayout (int widthMeasureSpec, int heightMeasureSpec, int l, int t, int r, int b)
@@ -71,68 +58,45 @@ public class FormsViewGroup extends ViewGroup {
 		return super.onTouchEvent(ev);
 	}
 	
-	public void sendBatchUpdate (
-			float pivotX,
-			float pivotY,
-			int visibility,
-			boolean enabled,
-			float opacity,
-			float rotation, 
-			float rotationX, 
-			float rotationY,
-			float scaleX,
-			float scaleY,
-			float translationX,
-			float translationY){
-		setPivotX (pivotX);
-		setPivotY (pivotY);
+	public void sendBatchUpdate (BatchUpdateRequest request) {
+	    inputTransparent = request.inputTransparent;
+		setPivotX (request.pivotX);
+		setPivotY (request.pivotY);
 		
-		if (getVisibility () != visibility)
-			setVisibility (visibility);
+		if (getVisibility () != request.visibility)
+			setVisibility (request.visibility);
 		
-		if (isEnabled () != enabled)
-			setEnabled (enabled);
+		if (isEnabled () != request.enabled)
+			setEnabled (request.enabled);
 		
-		setAlpha (opacity);
-		setRotation (rotation);
-		setRotationX (rotationX);
-		setRotationY (rotationY);
-		setScaleX (scaleX);
-		setScaleY (scaleY);
-		setTranslationX (translationX);
-		setTranslationY (translationY);
+		setAlpha (request.opacity);
+		setRotation (request.rotation);
+		setRotationX (request.rotationX);
+		setRotationY (request.rotationY);
+		setScaleX (request.scaleX);
+		setScaleY (request.scaleY);
+		setTranslationX (request.translationX);
+		setTranslationY (request.translationY);
 	}
 
-	public static void sendViewBatchUpdate (
-			View view,
-			float pivotX,
-			float pivotY,
-			int visibility,
-			boolean enabled,
-			float opacity,
-			float rotation,
-			float rotationX,
-			float rotationY,
-			float scaleX,
-			float scaleY,
-			float translationX,
-			float translationY){
-		view.setPivotX (pivotX);
-		view.setPivotY (pivotY);
+	public static void sendViewBatchUpdate (BatchUpdateRequest request) {
+	    View view = request.view;
+		view.setPivotX (request.pivotX);
+		view.setPivotY (request.pivotY);
 
-		if (view.getVisibility () != visibility)
-			view.setVisibility (visibility);
+		if (view.getVisibility () != request.visibility)
+			view.setVisibility (request.visibility);
 
-		if (view.isEnabled () != enabled)
-			view.setEnabled (enabled);
+		if (view.isEnabled () != request.enabled)
+			view.setEnabled (request.enabled);
 
-		view.setAlpha (opacity);
-		view.setRotation (rotation);
-		view.setRotationX (rotationX);
-		view.setRotationY (rotationY);
-		view.setScaleX (scaleX);
-		view.setScaleY (scaleY);
-		view.setTranslationX (translationX);
-		view.setTranslationY (translationY);
+		view.setAlpha (request.opacity);
+		view.setRotation (request.rotation);
+		view.setRotationX (request.rotationX);
+		view.setRotationY (request.rotationY);
+		view.setScaleX (request.scaleX);
+		view.setScaleY (request.scaleY);
+		view.setTranslationX (request.translationX);
+		view.setTranslationY (request.translationY);
 	}
 }

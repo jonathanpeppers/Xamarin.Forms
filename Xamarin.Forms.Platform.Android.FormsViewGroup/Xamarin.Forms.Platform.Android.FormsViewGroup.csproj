@@ -16,6 +16,7 @@
     <AssemblyName>FormsViewGroup</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <AndroidClassParser>class-parse</AndroidClassParser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

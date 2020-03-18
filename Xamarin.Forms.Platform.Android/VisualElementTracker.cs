@@ -286,6 +286,9 @@ namespace Xamarin.Forms.Platform.Android
 				aview.Visibility = ViewStates.Gone;
 		}
 
+		[ThreadStatic]
+		readonly static BatchUpdateRequest _batchUpdateRequest = new BatchUpdateRequest();
+
 		void UpdateNativeView(object sender, EventArgs e)
 		{
 			Performance.Start(out string reference);
@@ -293,36 +296,28 @@ namespace Xamarin.Forms.Platform.Android
 			VisualElement view = _renderer.Element;
 			AView aview = _renderer.View;
 
+			_batchUpdateRequest.PivotX = (float)(view.AnchorX * _context.ToPixels(view.Width));
+			_batchUpdateRequest.PivotY = (float)(view.AnchorY * _context.ToPixels(view.Height));
+			_batchUpdateRequest.Visibility = (int)(view.IsVisible ? ViewStates.Visible : ViewStates.Invisible);
+			_batchUpdateRequest.Enabled = view.IsEnabled;
+			_batchUpdateRequest.Opacity = (float)view.Opacity;
+			_batchUpdateRequest.Rotation = (float)view.Rotation;
+			_batchUpdateRequest.RotationX = (float)view.RotationX;
+			_batchUpdateRequest.RotationY = (float)view.RotationY;
+			_batchUpdateRequest.ScaleX = (float)(view.Scale * view.ScaleX);
+			_batchUpdateRequest.ScaleY = (float)(view.Scale * view.ScaleY);
+			_batchUpdateRequest.TranslationX = _context.ToPixels(view.TranslationX);
+			_batchUpdateRequest.TranslationY = _context.ToPixels(view.TranslationY);
 			if (aview is FormsViewGroup formsViewGroup)
 			{
-				formsViewGroup.SendBatchUpdate((float)(view.AnchorX * _context.ToPixels(view.Width)),
-											   (float)(view.AnchorY * _context.ToPixels(view.Height)),
-											   (int)(view.IsVisible ? ViewStates.Visible : ViewStates.Invisible),
-											   view.IsEnabled,
-											   (float)view.Opacity,
-											   (float)view.Rotation,
-											   (float)view.RotationX,
-											   (float)view.RotationY,
-											   (float)view.Scale * (float)view.ScaleX,
-											   (float)view.Scale * (float)view.ScaleY,
-											   _context.ToPixels(view.TranslationX),
-											   _context.ToPixels(view.TranslationY));
+				_batchUpdateRequest.View = null;
+				formsViewGroup.SendBatchUpdate(_batchUpdateRequest);
 			}
 			else
 			{
-				FormsViewGroup.SendViewBatchUpdate(aview,
-												   (float)(view.AnchorX * _context.ToPixels(view.Width)),
-												   (float)(view.AnchorY * _context.ToPixels(view.Height)),
-												   (int)(view.IsVisible ? ViewStates.Visible : ViewStates.Invisible),
-												   view.IsEnabled,
-												   (float)view.Opacity,
-												   (float)view.Rotation,
-												   (float)view.RotationX,
-												   (float)view.RotationY,
-												   (float)view.Scale * (float)view.ScaleX,
-												   (float)view.Scale * (float)view.ScaleY,
-												   _context.ToPixels(view.TranslationX),
-												   _context.ToPixels(view.TranslationY));
+				_batchUpdateRequest.View = aview;
+				FormsViewGroup.SendViewBatchUpdate(_batchUpdateRequest);
+				_batchUpdateRequest.View = null;
 			}
 
 			Performance.Stop(reference);

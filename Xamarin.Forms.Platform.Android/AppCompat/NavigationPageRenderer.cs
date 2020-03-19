@@ -795,7 +795,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 
 			AToolbar bar;
 			if (FormsAppCompatActivity.ToolbarResource != 0)
-				bar = AndroidAnticipator.InflateResource(activity, FormsAppCompatActivity.ToolbarResource).JavaCast<AToolbar>();
+				bar = activity.LayoutInflater.Inflate(FormsAppCompatActivity.ToolbarResource, null).JavaCast<AToolbar>();
 			else
 				bar = new AToolbar(context);
 

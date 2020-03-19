@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -55,12 +54,6 @@ namespace Xamarin.Forms.Internals
 
 			return total;
 		}
-
-		private static void AppendLog(StringBuilder sb)
-		{
-			sb.AppendLine("---LOG---");
-			sb.AppendLine(Profile.Log.Aggregate(string.Empty, (a, o) => a + o + Environment.NewLine));
-		} 
 
 		private static void AppendProfile(StringBuilder sb, long profiledMs, bool showZeros)
 		{
@@ -134,7 +127,6 @@ namespace Xamarin.Forms.Internals
 				var sb = new StringBuilder();
 				sb.AppendLine($"Profiled: {profiledMs}ms");
 				AppendProfile(sb, profiledMs, showZeros);
-				AppendLog(sb);
 				label.Text = sb.ToString();
 			};
 			buttonA.Clicked += delegate { showZeros = !showZeros; update(); };

@@ -19,7 +19,6 @@ using Xamarin.Forms.Platform.Android.AppCompat;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
 using AColor = Android.Graphics.Color;
-using AView = Android.Views.View;
 using ARelativeLayout = Android.Widget.RelativeLayout;
 using Xamarin.Forms.Internals;
 using System.Runtime.CompilerServices;
@@ -246,8 +245,7 @@ namespace Xamarin.Forms.Platform.Android
 			{
 				try
 				{
-					Profile.FramePartition("Inflate ToolbarResource");
-					bar = AndroidAnticipator.InflateResource(this, ToolbarResource).JavaCast<AToolbar>();
+					bar = LayoutInflater.Inflate(ToolbarResource, null).JavaCast<AToolbar>();
 				}
 #if __ANDROID_29__
 				catch (global::Android.Views.InflateException ie)
@@ -264,8 +262,7 @@ namespace Xamarin.Forms.Platform.Android
 						ToolbarResource = Resource.Layout.FallbackToolbarDoNotUse;
 						TabLayoutResource = Resource.Layout.FallbackTabbarDoNotUse;
 
-						Profile.FramePartition("Inflate ToolbarResource");
-						bar = AndroidAnticipator.InflateResource(this, ToolbarResource).JavaCast<AToolbar>();
+						bar = LayoutInflater.Inflate(ToolbarResource, null).JavaCast<AToolbar>();
 					}
 					else
 						throw;
@@ -285,18 +282,10 @@ namespace Xamarin.Forms.Platform.Android
 			}
 			else 
 			{
-				Profile.FramePartition("Activate Toolbar");
-				var view = AndroidAnticipator.ActivateView(this, typeof(AToolbar));
-
-				Profile.FramePartition("Cast Toolbar");
-				bar = view.JavaCast<AToolbar>();
+				bar = new AToolbar(this);
 			}
 
-			Profile.FramePartition("Set ActionBar");
 			SetSupportActionBar(bar);
-
-			Profile.FramePartition("Activate ARelativeLayout");
-			_layout = (ARelativeLayout)AndroidAnticipator.ActivateView(BaseContext, typeof(ARelativeLayout));
 
 			Profile.FramePartition("SetContentView");
 			_layout = new ARelativeLayout(BaseContext);
@@ -308,8 +297,7 @@ namespace Xamarin.Forms.Platform.Android
 			_previousState = _currentState;
 			_currentState = AndroidApplicationLifecycleState.OnCreate;
 
-			if (_application != null)
-				OnStateChanged();
+			OnStateChanged();
 
 			Profile.FramePartition("Forms.IsLollipopOrNewer");
 			if (Forms.IsLollipopOrNewer)
@@ -320,6 +308,9 @@ namespace Xamarin.Forms.Platform.Android
 					Profile.FramePartition("Set DrawsSysBarBkgrnds");
 					Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
 				}
+			}
+			if (Forms.IsLollipopOrNewer)
+			{
 				// Listen for the device going into power save mode so we can handle animations being disabled
 				Profile.FramePartition("Allocate PowerSaveModeReceiver");
 				_powerSaveModeBroadcastReceiver = new PowerSaveModeBroadcastReceiver();

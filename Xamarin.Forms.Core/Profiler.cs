@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,29 +15,6 @@ namespace Xamarin.Forms.Internals
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public struct Profile : IDisposable
 	{
-		public struct LogEntry
-		{
-			public string Format;
-			public object[] Arguments;
-
-			public LogEntry(string format, params object[] arguments)
-			{
-				Format = format;
-				Arguments = arguments;
-			}
-
-			public override string ToString()
-				=> string.Format(Format, Arguments?.Select(o => (o as Lazy<string>)?.Value ?? o).ToArray());
-		}
-
-		public static List<LogEntry> Log = new List<LogEntry>();
-		public static void WriteLog(string format, params object[] arguments)
-		{
-			var entry = new LogEntry(format, arguments);
-			lock(Log)
-				Log.Add(entry);
-		}
-
 		const int Capacity = 1000;
 
 		[DebuggerDisplay("{Name,nq} {Id} {Ticks}")]
@@ -50,7 +26,7 @@ namespace Xamarin.Forms.Internals
 			public int Depth;
 			public int Line;
 		}
-		public readonly static List<Datum> Data = new List<Datum>(Capacity);
+		public static List<Datum> Data = new List<Datum>(Capacity);
 
 		static Stack<Profile> Stack = new Stack<Profile>(Capacity);
 		static int Depth = 0;
@@ -68,6 +44,7 @@ namespace Xamarin.Forms.Internals
 
 		public static void Stop()
 		{
+			// unwind stack
 			Running = false;
 			while (Stack.Count > 0)
 				Stack.Pop();

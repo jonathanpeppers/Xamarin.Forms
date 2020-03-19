@@ -51,6 +51,7 @@ namespace Xamarin.Forms
 	{
 		const int TabletCrossover = 600;
 
+		static BuildVersionCodes? s_sdkInt;
 		static bool? s_isLollipopOrNewer;
 		static bool? s_is29OrNewer;
 		static bool? s_isMarshmallowOrNewer;
@@ -72,8 +73,15 @@ namespace Xamarin.Forms
 		static Color _ColorButtonNormal = Color.Default;
 		public static Color ColorButtonNormalOverride { get; set; }
 
-		internal static InitializationFlags _flags;
-		internal static BuildVersionCodes SdkInt => AndroidAnticipator.SdkVersion;
+		internal static BuildVersionCodes SdkInt
+		{
+			get
+			{
+				if (!s_sdkInt.HasValue)
+					s_sdkInt = Build.VERSION.SdkInt;
+				return (BuildVersionCodes)s_sdkInt;
+			}
+		}
 
 		internal static bool Is29OrNewer
 		{
@@ -169,15 +177,14 @@ namespace Xamarin.Forms
 		// Why is bundle a param if never used?
 		public static void Init(Context activity, Bundle bundle)
 		{
-			Profile.FrameBegin();
-
-			Profile.FramePartition("Assembly.GetCallingAssembly");
 			Assembly resourceAssembly;
+
+			Profile.FrameBegin("Assembly.GetCallingAssembly");
 			resourceAssembly = Assembly.GetCallingAssembly();
+			Profile.FrameEnd("Assembly.GetCallingAssembly");
 
-			Profile.FramePartition("SetupInit");
+			Profile.FrameBegin();
 			SetupInit(activity, resourceAssembly, null);
-
 			Profile.FrameEnd();
 		}
 
@@ -271,13 +278,10 @@ namespace Xamarin.Forms
 				ResourceManager.Init(resourceAssembly);
 			}
 
-			Profile.FramePartition("GetAccentColor");
-			var accentColor = GetAccentColor(activity);
-
-			Profile.FramePartition("GetAccentColor");
+			Profile.FramePartition("Color.SetAccent()");
 			// We want this to be updated when we have a new activity (e.g. on a configuration change)
 			// This could change if the UI mode changes (e.g., if night mode is enabled)
-			Color.SetAccent(accentColor);
+			Color.SetAccent(GetAccentColor(activity));
 			_ColorButtonNormalSet = false;
 
 			if (!IsInitialized)
@@ -310,27 +314,26 @@ namespace Xamarin.Forms
 			Profile.FramePartition("AndroidTicker");
 			Ticker.SetDefault(null);
 
+			Profile.FramePartition("RegisterAll");
+
 			if (!IsInitialized)
 			{
 				if (maybeOptions.HasValue)
 				{
 					var options = maybeOptions.Value;
 					var handlers = options.Handlers;
+					var flags = options.Flags;
 					var effectScopes = options.EffectScopes;
-					_flags = options.Flags;
-
 
 					//TODO: ExportCell?
 					//TODO: ExportFont
 
 					// renderers
-					Profile.FramePartition("RegisterRenderers");
 					Registrar.RegisterRenderers(handlers);
 
 					// effects
 					if (effectScopes != null)
 					{
-						Profile.FramePartition("RegisterEffects");
 						for (var i = 0; i < effectScopes.Length; i++)
 						{
 							var effectScope = effectScopes[0];
@@ -339,12 +342,9 @@ namespace Xamarin.Forms
 					}
 
 					// css
-					var noCss = (_flags & InitializationFlags.DisableCss) != 0;
+					var noCss = (flags & InitializationFlags.DisableCss) != 0;
 					if (!noCss)
-					{
-						Profile.FramePartition("RegisterStylesheets");
 						Registrar.RegisterStylesheets();
-					}
 				}
 				else
 				{
@@ -435,11 +435,11 @@ namespace Xamarin.Forms
 			Color rc;
 			using (var value = new TypedValue())
 			{
-				if (IsLollipopOrNewer && AndroidAnticipator.IdedResourceExists(context, Resource.Attribute.ColorAccent)) // Android 5.0+
+				if (context.Theme.ResolveAttribute(global::Android.Resource.Attribute.ColorAccent, value, true) && Forms.IsLollipopOrNewer) // Android 5.0+
 				{
 					rc = Color.FromUint((uint)value.Data);
 				}
-				else if (AndroidAnticipator.NamedResourceExists(context, "colorAccent", "attr"))  // < Android 5.0
+				else if (context.Theme.ResolveAttribute(context.Resources.GetIdentifier("colorAccent", "attr", context.PackageName), value, true))  // < Android 5.0
 				{
 					rc = Color.FromUint((uint)value.Data);
 				}
@@ -546,18 +546,12 @@ namespace Xamarin.Forms
 
 			void UpdateScreenMetrics(Context formsActivity)
 			{
-				Profile.FrameBegin();
-
-				Profile.FramePartition("DisplayMetrics.Density");
 				using (DisplayMetrics display = formsActivity.Resources.DisplayMetrics)
 				{
 					_scalingFactor = display.Density;
-
-					Profile.FramePartition("Set Sizes");
 					_pixelScreenSize = new Size(display.WidthPixels, display.HeightPixels);
 					_scaledScreenSize = new Size(_pixelScreenSize.Width / _scalingFactor, _pixelScreenSize.Height / _scalingFactor);
 				}
-				Profile.FrameEnd();
 			}
 
 			void CheckOrientationChanged(Context formsActivity)

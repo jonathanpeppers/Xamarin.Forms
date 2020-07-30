@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace HelloForms
 {
@@ -13,6 +7,13 @@ namespace HelloForms
 		public MainPage()
 		{
 			InitializeComponent();
+
+			var layout = new StackLayout();
+			for (int i = 0; i < 100; i++)
+			{
+				layout.Children.Add(new BindingLabel());
+			}
+			Content = layout;
 		}
 	}
 }

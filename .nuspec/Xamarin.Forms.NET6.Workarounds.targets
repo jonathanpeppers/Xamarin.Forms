@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup Condition=" '$(AndroidApplication)' == 'true' ">
+    <!--
+      TODO: disable Fast Deployment temporarily
+      Needed only for Android application projects
+      Fixed in: https://github.com/xamarin/monodroid/pull/1165
+    -->
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <!--NOTE: the System.IO.Ports @(PackageReference) triggers this-->
+    <NoWarn>$(NoWarn);XA4301</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    TODO:
+    Needed only for Android or iOS application projects.
+    These can be removed when *every* asembly is compiled against .NET 6.
+
+    The linker resolves some assembly references too eagerly, and
+    fails when it can't find them, so work around this by referencing
+    the missing assemblies.
+    See: https://github.com/mono/linker/issues/1139
+  -->
+  <PropertyGroup>
+    <_DotNetPackageVersion>5.0.0</_DotNetPackageVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(AndroidApplication)' == 'true' or ('$(OutputType)' == 'Exe' and '$(TargetPlatformIdentifier)' == 'ios') ">
+    <PackageReference Include="System.CodeDom"                        Version="$(_DotNetPackageVersion)" />
+    <PackageReference Include="System.Diagnostics.EventLog"           Version="$(_DotNetPackageVersion)" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="$(_DotNetPackageVersion)" />
+    <PackageReference Include="System.IO.Ports"                       Version="$(_DotNetPackageVersion)" />
+    <PackageReference Include="System.Security.Permissions"           Version="$(_DotNetPackageVersion)" />
+    <PackageReference Include="System.Threading.AccessControl"        Version="$(_DotNetPackageVersion)" />
+  </ItemGroup>
+</Project>

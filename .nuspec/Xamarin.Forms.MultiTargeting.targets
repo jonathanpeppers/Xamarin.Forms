@@ -72,4 +72,5 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('net5.0-windows')) == true">
     <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview3.201113.0" />
   </ItemGroup>
+  <Import Project="Xamarin.Forms.NET6.Workarounds.targets" Condition="'$(TargetFramework)' == 'net6.0-android' or '$(TargetFramework)' == 'net6.0-ios'" />
 </Project>

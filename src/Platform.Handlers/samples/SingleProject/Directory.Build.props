@@ -1,0 +1,4 @@
+<!-- This is here to "hide" everything, so the .csproj file is clean -->
+<Project>
+  <Import Project="..\..\..\..\.nuspec\Xamarin.Forms.props" />
+</Project>

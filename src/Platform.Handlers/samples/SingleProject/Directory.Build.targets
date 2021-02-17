@@ -1,0 +1,18 @@
+<!-- This is here to "hide" everything, so the .csproj file is clean -->
+<Project>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Forms\src\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
+    <ProjectReference Include="..\..\..\Forms\src\Xamarin.Forms.Xaml\Xamarin.Forms.Xaml.csproj" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetPlatformIdentifier)' == 'android' ">
+    <ProjectReference Include="..\..\..\Platform.Renderers\src\Xamarin.Forms.Platform.Android\Xamarin.Forms.Platform.Android.csproj" />
+    <PackageReference Include="Xamarin.Google.Android.Material"    Version="1.2.1.1" />
+    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.6" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetPlatformIdentifier)' == 'ios' ">
+    <ProjectReference Include="..\..\..\Platform.Renderers\src\Xamarin.Forms.Platform.iOS\Xamarin.Forms.Platform.iOS.csproj" />
+  </ItemGroup>
+  <Import Project="..\..\..\..\.nuspec\Xamarin.Forms.targets" />
+  <Import Project="..\..\..\..\.nuspec\Xamarin.Forms.NET6.Workarounds.targets" />
+</Project>

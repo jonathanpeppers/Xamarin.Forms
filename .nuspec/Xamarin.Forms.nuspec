@@ -99,6 +99,8 @@
     <file src="Xamarin.Forms.props" target="build" />
     <file src="Xamarin.Forms.DefaultItems.targets" target="build" />
     <file src="Xamarin.Forms.DefaultItems.props" target="build" />
+    <file src="Xamarin.Forms.SingleProject.targets" target="build" />
+    <file src="Xamarin.Forms.SingleProject.props" target="build" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Build.Tasks.dll" target="build\netstandard2.0" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Core.dll" target="build\netstandard2.0" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Xaml.dll" target="build\netstandard2.0" />
@@ -121,6 +123,8 @@
     <file src="Xamarin.Forms.props" target="buildTransitive" />
     <file src="Xamarin.Forms.DefaultItems.targets" target="buildTransitive" />
     <file src="Xamarin.Forms.DefaultItems.props" target="buildTransitive" />
+    <file src="Xamarin.Forms.SingleProject.targets" target="buildTransitive" />
+    <file src="Xamarin.Forms.SingleProject.props" target="buildTransitive" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Build.Tasks.dll" target="buildTransitive\netstandard2.0" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Core.dll" target="buildTransitive\netstandard2.0" />
     <file src="..\src\Forms\src\Xamarin.Forms.Build.Tasks\bin\$Configuration$\netstandard2.0\Xamarin.Forms.Xaml.dll" target="buildTransitive\netstandard2.0" />

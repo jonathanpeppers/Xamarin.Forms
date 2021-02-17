@@ -15,4 +15,5 @@
 		<None Remove="**\*.css" Condition="'$(EnableDefaultNoneItems)'=='True'" />
 	</ItemGroup>
 
+	<Import Project="Xamarin.Forms.SingleProject.targets" />
 </Project>

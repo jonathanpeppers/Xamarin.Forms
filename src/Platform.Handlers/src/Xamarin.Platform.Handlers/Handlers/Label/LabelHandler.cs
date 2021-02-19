@@ -1,9 +1,9 @@
 ﻿using System;
-#if __IOS__
+#if IOS
 using NativeView = UIKit.UILabel;
 #elif __MACOS__
 using NativeView = AppKit.NSTextField;
-#elif MONOANDROID
+#elif ANDROID
 using NativeView = Android.Widget.TextView;
 #elif NETCOREAPP
 using NativeView = System.Windows.Controls.TextBlock;
@@ -29,7 +29,7 @@ namespace Xamarin.Platform.Handlers
 		{
 			handler.TypedNativeView?.UpdateText(label);
 		}
-#if MONOANDROID
+#if ANDROID
 		protected override NativeView CreateNativeView() => new NativeView(this.Context);
 #else
 		protected override NativeView CreateNativeView() => new NativeView();

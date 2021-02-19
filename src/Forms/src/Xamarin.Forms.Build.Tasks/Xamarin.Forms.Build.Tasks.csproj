@@ -9,7 +9,7 @@
 	    <_DisableStrongNamer Condition=" '$(_DisableStrongNamer)' != 'True' ">False</_DisableStrongNamer>
 	    <AssemblyName>Xamarin.Forms.Build.Tasks</AssemblyName>
       <Description>Xamarin Forms Build Task</Description>
-	    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
+	    <TargetFrameworks>netstandard2.0</TargetFrameworks>
 	    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	    <SignAssembly Condition=" '$(_DisableStrongNamer)' != 'True' ">True</SignAssembly>
 	    <DisableStrongNamer Condition=" '$(_DisableStrongNamer)' == 'True' ">True</DisableStrongNamer>
@@ -59,7 +59,8 @@
 	</PropertyGroup>
 
 	<Target Name="_SetSnExe" Condition="'$(SnExe)' == '' And '$(OS)' == 'Windows_NT'">
-		<GetFrameworkSdkPath>
+    <!--TODO: fix for .NET 6-->
+		<!-- <GetFrameworkSdkPath>
 			<Output TaskParameter="Path" PropertyName="WindowsSdkPath" />
 		</GetFrameworkSdkPath>
 		<Exec Command="WHERE /r &quot;$(WindowsSdkPath.TrimEnd('\\'))&quot; sn" ConsoleToMSBuild="true">
@@ -67,7 +68,7 @@
 		</Exec>
 		<PropertyGroup>
 		    <SnExe>$([System.Text.RegularExpressions.Regex]::Replace('$(SnExe)', ';.*', ''))</SnExe>
-	  </PropertyGroup>
+	  </PropertyGroup> -->
 	</Target>
 
   <Target Name="_StrongName" AfterTargets="Build" DependsOnTargets="_SetSnExe" Condition="'$(TargetPath)' != ''" Inputs="$(TargetPath)" Outputs="$(IntermediateOutputPath)Sn.stamp">

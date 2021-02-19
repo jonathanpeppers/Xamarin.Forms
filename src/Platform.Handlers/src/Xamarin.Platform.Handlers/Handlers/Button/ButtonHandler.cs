@@ -1,11 +1,11 @@
 ﻿using System;
 using Xamarin.Forms;
 
-#if __IOS__
+#if IOS
 using NativeView = UIKit.UIButton;
 #elif __MACOS__
 using NativeView = AppKit.NSButton;
-#elif MONOANDROID
+#elif ANDROID
 using NativeView = AndroidX.AppCompat.Widget.AppCompatButton;
 #elif NETSTANDARD
 using NativeView = System.Object;
@@ -35,7 +35,7 @@ namespace Xamarin.Platform.Handlers
 			handler.TypedNativeView?.UpdateText(button);
 		}
 
-#if MONOANDROID
+#if ANDROID
 		protected override NativeView CreateNativeView() => new NativeView(this.Context);
 #else
 		protected override NativeView CreateNativeView() => new NativeView();

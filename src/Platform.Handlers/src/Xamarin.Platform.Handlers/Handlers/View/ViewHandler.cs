@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-#if __IOS__
+#if IOS
 using NativeView = UIKit.UIView;
 #elif __MACOS__
 using NativeView = AppKit.NSView;
-#elif MONOANDROID
+#elif ANDROID
 using NativeView = Android.Views.View;
 #elif NETSTANDARD
 using NativeView = System.Object;

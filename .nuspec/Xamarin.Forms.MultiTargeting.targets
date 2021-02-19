@@ -39,17 +39,6 @@
     <Compile Remove="**\Win32\*.cs" />
     <None Include="**\Win32\*.cs" />
   </ItemGroup>
-
-
-  <!-- Android -->
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net6.0-android'))">
-    <DefineConstants>$(DefineConstants);MONOANDROID</DefineConstants>
-  </PropertyGroup>
-
-  <!-- iOS -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0-ios' ">
-    <DefineConstants>$(DefineConstants);IOS</DefineConstants>
-  </PropertyGroup>
   
   <PropertyGroup Condition="$(TargetFramework.StartsWith('netcoreapp')) == true ">
     <UseWpf>true</UseWpf>

@@ -276,7 +276,7 @@ namespace Xamarin.Forms.Xaml
 				if (Context.ExceptionHandler != null)
 					Context.ExceptionHandler(e);
 				else
-					throw e;
+					throw;
 			}
 		}
 
